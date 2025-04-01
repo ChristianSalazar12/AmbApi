@@ -4,11 +4,14 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const loggerMiddlewares = require("./middlewares/logger");
-const errorHandler = require("./middlewares/errorHandler");
-const { validateConductor, validateParamedic } = require("./utils/validation");
-const { validateUser } = require("./utils/userValidarion");
-const authenticateToken = require("./middlewares/auth");
+const loggerMiddlewares = require("./src/middlewares/logger");
+const errorHandler = require("./src/middlewares/errorHandler");
+const {
+  validateConductor,
+  validateParamedic,
+} = require("./src/utils/validation");
+const { validateUser } = require("./src/utils/userValidarion");
+const authenticateToken = require("./src/middlewares/auth");
 const bodyParser = require("body-parser");
 
 const fs = require("fs");
