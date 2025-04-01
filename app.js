@@ -1,5 +1,7 @@
 require("dotenv").config();
 const express = require("express");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
@@ -28,9 +30,46 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
+//swagger por ahora
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Cats API",
+      description: "The cats API description",
+      version: "1.0.0",
+    },
+    tags: [{ name: "cats", description: "Everything about cats" }],
+  },
+  apis: ["app.js"], // Aquí pones la ruta donde están tus endpoints
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+//
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Endpoint de prueba
+ *     responses:
+ *       200:
+ *         description: Retorna un mensaje de prueba
+ */
 app.get("/", (req, res) => {
   res.send(`BIENVENIDOS`);
 });
+/**
+ * @swagger
+ * /ambulancias:
+ *   get:
+ *     summary: Endpoint de prueba
+ *     responses:
+ *       200:
+ *         description: Retorna un mensaje de prueba
+ */
 app.get("/ambulancias", (req, res) => {
   res.json({
     ambulancias: [
@@ -232,6 +271,15 @@ app.put("/paramedico/:id", (req, res) => {
     certificacion,
   });
 });
+/**
+ * @swagger
+ * /paramedics/:id:
+ *   get:
+ *     summary: Endpoint de prueba
+ *     responses:
+ *       200:
+ *         description: Retorna un mensaje de prueba
+ */
 
 app.delete("/paramedics/:id", (req, res) => {
   const paramedicId = parseInt(req.params.id, 10);
@@ -280,7 +328,15 @@ app.get("/servicio/:id/complicacion", (req, res) => {
     },
   });
 });
-
+/**
+ * @swagger
+ * /db-users:
+ *   get:
+ *     summary: Endpoint de prueba
+ *     responses:
+ *       200:
+ *         description: Retorna un mensaje de prueba
+ */
 app.get("/db-users", async (req, res) => {
   try {
     const users = await prisma.user.findMany();
@@ -294,7 +350,15 @@ app.get("/db-users", async (req, res) => {
 app.get("/protectedRoute", authenticateToken, (req, res) => {
   res.send("Esta es una ruta protegida");
 });
-
+/**
+ * @swagger
+ * /register:
+ *   get:
+ *     summary: Endpoint de prueba
+ *     responses:
+ *       200:
+ *         description: Retorna un mensaje de prueba
+ */
 app.post("/register", async (req, res) => {
   const { email, password, name } = req.body;
 
@@ -314,7 +378,15 @@ app.post("/register", async (req, res) => {
   });
   res.status(201).json({ message: "user registered Successfully" });
 });
-
+/**
+ * @swagger
+ * /login:
+ *   get:
+ *     summary: Endpoint de prueba
+ *     responses:
+ *       200:
+ *         description: Retorna un mensaje de prueba
+ */
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await prisma.user.findUnique({ where: { email } });
