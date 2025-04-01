@@ -12,7 +12,7 @@ function validateConductor(conductor, conductors) {
   if (!isValidName(name)) {
     return {
       isValid: false,
-      error: "El nombre debe tener al menos 3 caracteres",
+      error: "El nombre debe tener al menos 4 caracteres",
     };
   }
   if (!isUniqueNumericId(id, conductors)) {

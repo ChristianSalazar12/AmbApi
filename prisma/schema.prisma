@@ -16,12 +16,106 @@ enum Role{
   ADMIN
   USER
 }
+enum EstadoServicio{
+  EN_CURSO
+  FINALIZADO
+  CANCELADO
+}
+enum TipoUbicacion{
+  ACCIDENTE
+  HOSPITAL
+}
+model IPS{
+  id Int @id @default(autoincrement())
+  nombre String @unique
+  ambulancias Ambulancia[]
+  usuarios Usuario[]
+  
+}
+
+model Ambulancia {
+  id        Int     @id @default(autoincrement())
+  placa     String  @unique
+  tipo      String
+  ips       IPS     @relation(fields: [ipsId], references: [id])
+  ipsId     Int
+  servicios Servicio[]
+}
+
+model Usuario {
+  id        Int     @id @default(autoincrement())
+  nombre    String
+  email     String  @unique
+  role      Role
+  ips       IPS?    @relation(fields: [ipsId], references: [id])
+  ipsId     Int?
+  serviciosComoConductor Servicio[] @relation("conductor")
+  serviciosComoParamedico Servicio[] @relation("paramedico")
+}
+
+model Paciente {
+  id         Int     @id @default(autoincrement())
+  nombre     String
+  documento  String  @unique
+  edad       Int
+  servicios  Servicio[]
+}
+
+model Servicio {
+  id            Int             @id @default(autoincrement())
+  ambulancia    Ambulancia      @relation(fields: [ambulanciaId], references: [id])
+  ambulanciaId  Int
+  conductor     Usuario         @relation("conductor", fields: [conductorId], references: [id])
+  conductorId   Int
+  paramedico    Usuario         @relation("paramedico", fields: [paramedicoId], references: [id])
+  paramedicoId  Int
+  paciente      Paciente        @relation(fields: [pacienteId], references: [id])
+  pacienteId    Int
+  estado        EstadoServicio
+  inicio        DateTime        @default(now())
+  fin           DateTime?
+  tiempos       TiempoServicio[]
+  informe       Informe?
+  ubicaciones   Ubicacion[]
+}
+
+model TiempoServicio {
+  id          Int      @id @default(autoincrement())
+  servicio    Servicio @relation(fields: [servicioId], references: [id])
+  servicioId  Int
+  evento      String
+  tiempo      DateTime @default(now())
+}
+
+model Informe {
+  id          Int      @id @default(autoincrement())
+  servicio    Servicio @relation(fields: [servicioId], references: [id])
+  servicioId  Int @unique
+  observaciones String?
+  aprobado    Boolean @default(false)
+}
+
+model Ubicacion {
+  id          Int             @id @default(autoincrement())
+  direccion   String
+  tipo        TipoUbicacion
+  servicio    Servicio        @relation(fields: [servicioId], references: [id])
+  servicioId  Int
+}
 
 model User {
   id Int @id @default(autoincrement())
   name String
+  fuction String @default("No especificado")
   email String @unique
   password String
   role Role
+  
+}
+model Paramedico{
+  id Int @id @default(autoincrement())
+  name String
+  categoria String
+
   
 }
