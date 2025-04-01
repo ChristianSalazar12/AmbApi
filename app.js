@@ -1,8 +1,11 @@
 require("dotenv").config();
 const express = require("express");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 const loggerMiddlewares = require("./middlewares/logger");
 const errorHandler = require("./middlewares/errorHandler");
 const { validateConductor, validateParamedic } = require("./utils/validation");
+const authenticateToken = require("./middlewares/auth");
 const bodyParser = require("body-parser");
 
 const fs = require("fs");
@@ -271,6 +274,21 @@ app.get("/servicio/:id/complicacion", (req, res) => {
     },
   });
 });
+
+app.get("/db-users", async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.json(users);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error al comunicarse con la base de datos" });
+  }
+});
+app.get("/protectedRoute", authenticateToken, (req, res) => {
+  res.send("Esta es una ruta protegida");
+});
+
 app.get("/error", (req, res, next) => {
   next(new Error("Error Fabricado"));
 });
