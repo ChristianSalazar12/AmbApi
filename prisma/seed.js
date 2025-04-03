@@ -20,7 +20,7 @@ async function main() {
   // 🚑 Crear ambulancias
   const ambulancia1 = await prisma.ambulancia.create({
     data: {
-      placa: "ABC-123",
+      placa: "ABC-124",
       tipo: "UTIM", // Unidad de Terapia Intensiva Móvil
       ipsId: ips1.id,
     },
@@ -28,7 +28,7 @@ async function main() {
 
   const ambulancia2 = await prisma.ambulancia.create({
     data: {
-      placa: "XYZ-789",
+      placa: "XYZ-786",
       tipo: "Básica",
       ipsId: ips2.id,
     },
@@ -37,7 +37,7 @@ async function main() {
   // 👤 Crear usuarios
   const usuario1 = await prisma.usuario.create({
     data: {
-      nombre: "Carlos Pérez",
+      name: "Carlos Pérez",
       email: "carlos.perez@example.com",
       password: "a12345678",
       role: "ADMIN",
@@ -47,7 +47,7 @@ async function main() {
 
   const usuario2 = await prisma.usuario.create({
     data: {
-      nombre: "Ana Rodríguez",
+      name: "Ana Rodríguez",
       email: "ana.rodriguez@example.com",
       password: "a12345678",
       role: "USER",

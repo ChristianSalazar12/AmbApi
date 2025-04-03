@@ -27,7 +27,7 @@ enum TipoUbicacion{
 }
 model IPS{
   id Int @id @default(autoincrement())
-  nombre String @unique
+  nombre String 
   ambulancias Ambulancia[]
   usuarios Usuario[]
   
