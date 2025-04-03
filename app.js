@@ -339,7 +339,7 @@ app.get("/servicio/:id/complicacion", (req, res) => {
  */
 app.get("/db-users", async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.usuario.findMany();
     res.json(users);
   } catch (error) {
     res

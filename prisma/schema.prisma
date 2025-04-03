@@ -54,16 +54,7 @@ model Usuario {
   serviciosComoParamedico Servicio[] @relation("paramedico")
 }
 
-
-model User {
-  id Int @id @default(autoincrement())
-  name String
-  fuction String @default("No especificado")
-  email String @unique
-  password String
-  role Role
-  
-}
+ 
 
 model Paciente {
   id         Int     @id @default(autoincrement())
