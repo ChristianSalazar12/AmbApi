@@ -44,13 +44,25 @@ model Ambulancia {
 
 model Usuario {
   id        Int     @id @default(autoincrement())
-  nombre    String
+  name      String
   email     String  @unique
+  password  String
   role      Role
   ips       IPS?    @relation(fields: [ipsId], references: [id])
   ipsId     Int?
   serviciosComoConductor Servicio[] @relation("conductor")
   serviciosComoParamedico Servicio[] @relation("paramedico")
+}
+
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  fuction String @default("No especificado")
+  email String @unique
+  password String
+  role Role
+  
 }
 
 model Paciente {
@@ -103,15 +115,6 @@ model Ubicacion {
   servicioId  Int
 }
 
-model User {
-  id Int @id @default(autoincrement())
-  name String
-  fuction String @default("No especificado")
-  email String @unique
-  password String
-  role Role
-  
-}
 model Paramedico{
   id Int @id @default(autoincrement())
   name String

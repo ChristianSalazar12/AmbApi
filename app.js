@@ -368,11 +368,11 @@ app.post("/register", async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await prisma.user.create({
+  const newUser = await prisma.usuario.create({
     data: {
+      name,
       email,
       password: hashedPassword,
-      name,
       role: "USER",
     },
   });
@@ -389,7 +389,7 @@ app.post("/register", async (req, res) => {
  */
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.usuario.findUnique({ where: { email } });
   if (!user)
     return res.status(400).json({ error: "invalid email or Paswword" });
   const validPassword = await bcrypt.compare(password, user.password);
