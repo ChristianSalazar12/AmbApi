@@ -19,6 +19,7 @@ const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
 const { error } = require("console");
+const { validateAmbulancia } = require("./src/utils/validationAmbulancia");
 const userFilePath = path.join(__dirname, "users.json");
 const paramedicsFilePath = path.join(__dirname, "paramedics.json");
 
@@ -70,14 +71,14 @@ app.get("/", (req, res) => {
  *       200:
  *         description: Retorna un mensaje de prueba
  */
-app.get("/ambulancias", (req, res) => {
-  res.json({
-    ambulancias: [
-      { id: 1, placa: "ABC123", estad: "Disponible" },
-      { id: 2, placa: "AXC123", estad: "En servicio" },
-    ],
-  });
-});
+// app.get("/ambulancias", (req, res) => {
+//   res.json({
+//     ambulancias: [
+//       { id: 1, placa: "ABC123", estad: "Disponible" },
+//       { id: 2, placa: "AXC123", estad: "En servicio" },
+//     ],
+//   });
+// });
 app.get("/ambulancia/:id", (req, res) => {
   const id = req.params.id;
   res.json({ id, placa: "ABC123", estado: "Disponible" });
@@ -402,6 +403,52 @@ app.post("/login", async (req, res) => {
     { expiresIn: "4h" }
   );
   res.json({ token });
+});
+
+app.get("/ambulancias", async (req, res) => {
+  try {
+    const ambulancia = await prisma.ambulancia.findMany();
+    res.json(ambulancia);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error al comunicarse con la base de datos" });
+  }
+});
+
+app.post("/ambulancias/add", async (req, res) => {
+  const { modelo, placa, tipo, ipsId } = req.body;
+
+  try {
+    const validacion = await validateAmbulancia(
+      { modelo, placa, tipo, ipsId },
+      prisma
+    );
+    if (!validacion.isValid) {
+      console.log("error fue", validacion.error);
+      return res.status(400).json({ message: validacion.error });
+    }
+
+    const newAmbulancia = await prisma.ambulancia.create({
+      data: {
+        modelo,
+        placa,
+        tipo,
+        ipsId,
+      },
+    });
+
+    res.status(201).json({
+      message: "Ambulancia de placas registrada con éxito.",
+      ambulancia: newAmbulancia,
+    });
+  } catch (error) {
+    console.error("Error al registrar ambulancia:", error);
+    if (error.code === "P2002") {
+      return res.status(409).json({ message: "La placa ya está registrada." });
+    }
+    res.status(500).json({ message: "Error del servidor", error });
+  }
 });
 
 app.get("/error", (req, res, next) => {

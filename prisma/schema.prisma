@@ -12,104 +12,162 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-enum Role{
+model Usuario {
+  id           Int     @id @default(autoincrement())
+  name         String
+  username     String  @unique
+  identification String
+  password     String
+  rol          Role
+
+  // Un usuario "User" puede ser Paramédico o Auxiliar, pero no ambos
+  paramedicoId Int?   @unique
+  auxiliarId   Int?   @unique
+  paramedico   Paramedico? @relation("ParamedicoUsuario",fields: [paramedicoId], references: [id])
+  auxiliar     Auxiliar?   @relation("AuxiliarUsuario",fields: [auxiliarId], references: [id])
+
+  // Un usuario "Admin" puede ser Conductor o Auxiliar, pero no ambos
+}
+
+enum Role {
   ADMIN
   USER
 }
-enum EstadoServicio{
-  EN_CURSO
-  FINALIZADO
-  CANCELADO
-}
-enum TipoUbicacion{
-  ACCIDENTE
-  HOSPITAL
-}
-model IPS{
-  id Int @id @default(autoincrement())
-  nombre String 
+
+model Ips {
+  id        Int    @id @default(autoincrement())
+  nombre    String
+  direccion String
   ambulancias Ambulancia[]
-  usuarios Usuario[]
-  
 }
 
 model Ambulancia {
-  id        Int     @id @default(autoincrement())
-  placa     String  @unique
-  tipo      String
-  ips       IPS     @relation(fields: [ipsId], references: [id])
-  ipsId     Int
-  servicios Servicio[]
-}
-
-model Usuario {
-  id        Int     @id @default(autoincrement())
-  name      String
-  email     String  @unique
-  password  String
-  role      Role
-  ips       IPS?    @relation(fields: [ipsId], references: [id])
-  ipsId     Int?
-  serviciosComoConductor Servicio[] @relation("conductor")
-  serviciosComoParamedico Servicio[] @relation("paramedico")
-}
-
- 
-
-model Paciente {
-  id         Int     @id @default(autoincrement())
-  nombre     String
-  documento  String  @unique
-  edad       Int
-  servicios  Servicio[]
+  id       Int    @id @default(autoincrement())
+  modelo   String
+  placa    String @unique
+  tipo     String
+  ipsId    Int
+  ips      Ips    @relation(fields: [ipsId], references: [id])
+  turnos   Turnos[]
 }
 
 model Servicio {
-  id            Int             @id @default(autoincrement())
-  ambulancia    Ambulancia      @relation(fields: [ambulanciaId], references: [id])
-  ambulanciaId  Int
-  conductor     Usuario         @relation("conductor", fields: [conductorId], references: [id])
+  id              Int      @id @default(autoincrement())
+  date            DateTime
+  status          Status
+  time_arrived    DateTime
+  time_finish     DateTime
+  code_start      String
+  code_end        String
+  place_accident  String
+  nro_informe     String
+  id_turno        Int
+  id_paciente     Int
+  id_descripcion  Int @unique
+  complicacion    Complicacion[]
+  turno           Turnos    @relation(fields: [id_turno], references: [id])
+  paciente        Pacientes @relation(fields: [id_paciente], references: [id])
+  descripcion     Descripcion @relation("descripcionServicio",fields: [id_descripcion], references: [id])
+}
+
+enum Status {
+  PENDIENTE
+  COMPLETADO
+  CANCELADO
+}
+enum TypeServicio {
+  URGENCIA
+  EMERGENCIA
+  PROGRAMADO
+}
+enum Typecomplicacion {
+  RESPIRATORIA
+  CARDIOVASCULAR
+  TRAUMATISMO
+  NEUROLOGICO
+  TRAUMATICO
+  INFECCIOSO
+  OTRO
+  NO_APLICA
+}
+
+model Complicacion {
+  id          Int    @id @default(autoincrement())
+  type        Typecomplicacion
+  description String
+  id_servicio Int
+  servicio    Servicio @relation(fields: [id_servicio], references: [id])
+}
+
+model Pacientes {
+  id            Int    @id @default(autoincrement())
+  name          String
+  last_name     String
+  document      String @unique
+  entidad_salud String
+  servicios     Servicio[]
+}
+
+model Descripcion {
+  id           Int    @id @default(autoincrement())
+  description  String
+  type_context TypeContext
+  implicados   String
+  servicio      Servicio? @relation("descripcionServicio")
+}
+
+enum TypeContext {
+  CLINICO
+  OPERATIVO
+}
+
+model Turnos {
+  id            Int    @id @default(autoincrement())
+  time_start    DateTime
+  time_end      DateTime
+  paramedicId   Int
+  auxiliarId    Int
   conductorId   Int
-  paramedico    Usuario         @relation("paramedico", fields: [paramedicoId], references: [id])
-  paramedicoId  Int
-  paciente      Paciente        @relation(fields: [pacienteId], references: [id])
-  pacienteId    Int
-  estado        EstadoServicio
-  inicio        DateTime        @default(now())
-  fin           DateTime?
-  tiempos       TiempoServicio[]
-  informe       Informe?
-  ubicaciones   Ubicacion[]
+  ambulanciaId  Int
+  paramedico    Paramedico @relation(fields: [paramedicId], references: [id])
+  auxiliar      Auxiliar   @relation(fields: [auxiliarId], references: [id])
+  conductor     Conductor  @relation(fields: [conductorId], references: [id])
+  ambulancia    Ambulancia @relation(fields: [ambulanciaId], references: [id])
+  servicios     Servicio[]
 }
 
-model TiempoServicio {
-  id          Int      @id @default(autoincrement())
-  servicio    Servicio @relation(fields: [servicioId], references: [id])
-  servicioId  Int
-  evento      String
-  tiempo      DateTime @default(now())
+model Conductor {
+  id             Int    @id @default(autoincrement())
+  name           String
+  last_name      String
+  document       String @unique
+  no_licencia    String
+  no_fast_driver String
+  turnos         Turnos[]
 }
 
-model Informe {
-  id          Int      @id @default(autoincrement())
-  servicio    Servicio @relation(fields: [servicioId], references: [id])
-  servicioId  Int @unique
-  observaciones String?
-  aprobado    Boolean @default(false)
-}
-
-model Ubicacion {
-  id          Int             @id @default(autoincrement())
-  direccion   String
-  tipo        TipoUbicacion
-  servicio    Servicio        @relation(fields: [servicioId], references: [id])
-  servicioId  Int
-}
-
-model Paramedico{
-  id Int @id @default(autoincrement())
-  name String
-  categoria String
-
+model Paramedico {
+  id              Int    @id @default(autoincrement())
+  name            String
+  last_name       String
+  document        String @unique
+  tipo_medic      String
+  no_ci_medic     String
+  id_capacitation String
+  turnos          Turnos[]
+  usuario Usuario? @relation("ParamedicoUsuario")
   
+}
+
+model Auxiliar {
+  id                   Int    @id @default(autoincrement())
+  name                 String
+  last_name            String
+  document             String @unique
+  no_ci_auxiliar       String
+  no_ci_soporte_vital  String
+  turnos               Turnos[]
+  usuario Usuario? @relation("AuxiliarUsuario")
+
+
 }

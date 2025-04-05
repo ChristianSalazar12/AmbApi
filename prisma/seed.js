@@ -3,98 +3,146 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log("Seeding database...");
+  // Crear IPS
 
-  // 🏥 Crear algunas IPS
-  const ips1 = await prisma.iPS.create({
+  const ips = await prisma.ips.create({
     data: {
-      nombre: "Clínica Santa Fe",
+      nombre: "Clínica San Juan",
+      direccion: "Calle 123 #45-67",
     },
   });
 
-  const ips2 = await prisma.iPS.create({
+  // Crear Ambulancia
+  const ambulancia = await prisma.ambulancia.create({
     data: {
-      nombre: "Hospital Central",
+      modelo: "Toyota Hiace",
+      placa: "ABC123",
+      tipo: "UCI",
+      ipsId: ips.id,
     },
   });
 
-  // 🚑 Crear ambulancias
-  const ambulancia1 = await prisma.ambulancia.create({
+  // Crear Conductor
+  const conductor = await prisma.conductor.create({
     data: {
-      placa: "ABC-124",
-      tipo: "UTIM", // Unidad de Terapia Intensiva Móvil
-      ipsId: ips1.id,
+      name: "Luis",
+      last_name: "Ramírez",
+      document: "1020304050",
+      no_licencia: "LIC12345",
+      no_fast_driver: "FD999",
     },
   });
 
-  const ambulancia2 = await prisma.ambulancia.create({
+  // Crear Paramédico
+  const paramedico = await prisma.paramedico.create({
     data: {
-      placa: "XYZ-786",
-      tipo: "Básica",
-      ipsId: ips2.id,
+      name: "Carlos",
+      last_name: "Méndez",
+      document: "123456789",
+      tipo_medic: "General",
+      no_ci_medic: "CI987654",
+      id_capacitation: "CAP12345",
     },
   });
 
-  // 👤 Crear usuarios
-  const usuario1 = await prisma.usuario.create({
+  // Crear Auxiliar
+  const auxiliar = await prisma.auxiliar.create({
     data: {
-      name: "Carlos Pérez",
-      email: "carlos.perez@example.com",
-      password: "a12345678",
-      role: "ADMIN",
-      ipsId: ips1.id,
+      name: "Ana",
+      last_name: "García",
+      document: "987654321",
+      no_ci_auxiliar: "AUX654321",
+      no_ci_soporte_vital: "SV123456",
     },
   });
 
-  const usuario2 = await prisma.usuario.create({
+  // Crear Usuario asociado al paramédico
+  const user1 = await prisma.usuario.create({
     data: {
-      name: "Ana Rodríguez",
-      email: "ana.rodriguez@example.com",
-      password: "a12345678",
-      role: "USER",
-      ipsId: ips2.id,
+      name: "Carlos Méndez",
+      username: "carlos.mendez",
+      identification: "123456789",
+      password: "hashedpassword1",
+      rol: "USER",
+      paramedicoId: paramedico.id,
     },
   });
 
-  // 🏥 Pacientes
-  const paciente1 = await prisma.paciente.create({
+  // Crear Usuario asociado al auxiliar
+  const user2 = await prisma.usuario.create({
     data: {
-      nombre: "Juan López",
-      documento: "12345678",
-      edad: 45,
+      name: "Ana García",
+      username: "ana.garcia",
+      identification: "987654321",
+      password: "hashedpassword2",
+      rol: "USER",
+      auxiliarId: auxiliar.id,
     },
   });
 
-  // 🚑 Servicio
-  const servicio1 = await prisma.servicio.create({
+  // Crear Turno
+  const turno = await prisma.turnos.create({
     data: {
-      ambulanciaId: ambulancia1.id,
-      conductorId: usuario1.id,
-      paramedicoId: usuario2.id,
-      pacienteId: paciente1.id,
-      estado: "EN_CURSO",
+      time_start: new Date("2025-04-04T08:00:00Z"),
+      time_end: new Date("2025-04-04T18:00:00Z"),
+      paramedicId: paramedico.id,
+      auxiliarId: auxiliar.id,
+      conductorId: conductor.id,
+      ambulanciaId: ambulancia.id,
     },
   });
 
-  // ⏳ Registro de tiempos del servicio
-  await prisma.tiempoServicio.createMany({
-    data: [
-      {
-        servicioId: servicio1.id,
-        evento: "Salida del hospital",
-      },
-      {
-        servicioId: servicio1.id,
-        evento: "Llegada al sitio del accidente",
-      },
-    ],
+  // Crear Paciente
+  const paciente = await prisma.pacientes.create({
+    data: {
+      name: "Juan",
+      last_name: "Pérez",
+      document: "1122334455",
+      entidad_salud: "EPS SaludTotal",
+    },
   });
 
-  console.log("✅ Seeding completed!");
+  // Crear Descripción
+  const descripcion = await prisma.descripcion.create({
+    data: {
+      description: "Paciente encontrado inconsciente en vía pública",
+      type_context: "CLINICO",
+      implicados: "Ninguno",
+    },
+  });
+
+  // Crear Servicio
+  const servicio = await prisma.servicio.create({
+    data: {
+      date: new Date(),
+      status: "PENDIENTE",
+      time_arrived: new Date(),
+      time_finish: new Date(),
+      code_start: "C001",
+      code_end: "C002",
+      place_accident: "Av. Siempreviva",
+      nro_informe: "INF001",
+      id_turno: turno.id,
+      id_paciente: paciente.id,
+      id_descripcion: descripcion.id,
+    },
+  });
+
+  // Crear Complicación
+  const complicacion = await prisma.complicacion.create({
+    data: {
+      type: "RESPIRATORIA",
+      description: "Dificultad respiratoria severa",
+      id_servicio: servicio.id,
+    },
+  });
+
+  console.log("✅ Database seeded!");
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Error en seed:", e);
     process.exit(1);
   })
   .finally(async () => {
