@@ -12,23 +12,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model Usuario {
-  id           Int     @id @default(autoincrement())
-  name         String
-  username     String  @unique
-  identification String
-  password     String
-  rol          Role
-
-  // Un usuario "User" puede ser Paramédico o Auxiliar, pero no ambos
-  paramedicoId Int?   @unique
-  auxiliarId   Int?   @unique
-  paramedico   Paramedico? @relation("ParamedicoUsuario",fields: [paramedicoId], references: [id])
-  auxiliar     Auxiliar?   @relation("AuxiliarUsuario",fields: [auxiliarId], references: [id])
-
-  // Un usuario "Admin" puede ser Conductor o Auxiliar, pero no ambos
-}
-
+ 
 enum Role {
   ADMIN
   USER
@@ -129,6 +113,7 @@ model Turnos {
   auxiliarId    Int
   conductorId   Int
   ambulanciaId  Int
+
   paramedico    Paramedico @relation(fields: [paramedicId], references: [id])
   auxiliar      Auxiliar   @relation(fields: [auxiliarId], references: [id])
   conductor     Conductor  @relation(fields: [conductorId], references: [id])
@@ -154,9 +139,9 @@ model Paramedico {
   tipo_medic      String
   no_ci_medic     String
   id_capacitation String
+  password        String
+  role            Role
   turnos          Turnos[]
-  usuario Usuario? @relation("ParamedicoUsuario")
-  
 }
 
 model Auxiliar {
@@ -167,7 +152,7 @@ model Auxiliar {
   no_ci_auxiliar       String
   no_ci_soporte_vital  String
   turnos               Turnos[]
-  usuario Usuario? @relation("AuxiliarUsuario")
-
-
+  password            String
+  role                Role
+ 
 }

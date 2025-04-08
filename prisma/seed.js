@@ -42,6 +42,8 @@ async function main() {
       tipo_medic: "General",
       no_ci_medic: "CI987654",
       id_capacitation: "CAP12345",
+      password: "hashedpassword",
+      rol: "USER",
     },
   });
 
@@ -53,6 +55,8 @@ async function main() {
       document: "987654321",
       no_ci_auxiliar: "AUX654321",
       no_ci_soporte_vital: "SV123456",
+      password: "hashedpassword",
+      rol: "USER",
     },
   });
 
