@@ -203,7 +203,65 @@ app.delete("/drivers/:id", async (req, res) => {
   }
 });
 //paramdics
+app.post("/paramedics/add", async (req, res) => {
+  try {
+    const data = req.body;
 
+    const validation = await validateParamedico(data, prisma);
+    if (!validation.isValid) {
+      return res.status(400).json({ message: validation.error });
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    const nuevoParamedico = await prisma.paramedico.create({
+      data: {
+        name: data.name,
+        last_name: data.last_name,
+        document: data.document,
+        tipo_medic: data.tipo_medic,
+        no_ci_medic: data.no_ci_medic,
+        id_capacitation: data.id_capacitation,
+        password: hashedPassword,
+        role: data.role,
+      },
+    });
+
+    res.status(201).json(nuevoParamedico);
+  } catch (error) {
+    console.error("Error al agregar paramédico:", error);
+    res.status(500).json({ error: "Error interno al agregar paramédico." });
+  }
+});
+app.get("/paramedics", async (req, res) => {
+  try {
+    const paramedicos = await prisma.paramedico.findMany();
+    res.json(paramedicos);
+  } catch (error) {
+    console.error("Error al obtener paramédicos:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+});
+
+app.delete("/paramedics/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const paramedico = await prisma.paramedico.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!paramedico) {
+      return res.status(404).json({ message: "Paramédico no encontrado." });
+    }
+
+    await prisma.paramedico.delete({ where: { id: parseInt(id) } });
+    res.json({ message: "Paramédico eliminado correctamente." });
+  } catch (error) {
+    console.error("Error al eliminar paramédico:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+});
 ////////////
 
 app.get("/error", (req, res, next) => {
