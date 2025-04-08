@@ -9,10 +9,7 @@ const jwt = require("jsonwebtoken");
 const loggerMiddlewares = require("./src/middlewares/logger");
 const errorHandler = require("./src/middlewares/errorHandler");
 const { validateConductor } = require("./src/utils/driverValidation");
-const {
-  validateUser,
-  validateLoginData,
-} = require("./src/utils/userValidarion");
+const { validateLoginData } = require("./src/utils/userValidarion");
 const authenticateToken = require("./src/middlewares/auth");
 const bodyParser = require("body-parser");
 
@@ -20,9 +17,6 @@ const fs = require("fs");
 const path = require("path");
 const { error } = require("console");
 const { validateAmbulancia } = require("./src/utils/validationAmbulancia");
-const { validateParamedico } = require("./src/utils/paramedicValidation");
-const userFilePath = path.join(__dirname, "users.json");
-const paramedicsFilePath = path.join(__dirname, "paramedics.json");
 
 const app = express();
 app.use(bodyParser.json());
@@ -170,7 +164,9 @@ app.post("/drivers/add", async (req, res) => {
     res.status(201).json(nuevoConductor);
   } catch (error) {
     console.error("Error al agregar conductor:", error);
-    res.status(500).json({ error: "Error interno al agregar conductor." });
+    res
+      .status(500)
+      .json({ error: "Error interno al agregar conductor.", error });
   }
 });
 
@@ -180,7 +176,7 @@ app.get("/drivers", async (req, res) => {
     res.json(conductores);
   } catch (error) {
     console.error("Error al obtener conductores:", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+    res.status(500).json({ message: "Error interno del servidor.", error });
   }
 });
 
@@ -199,7 +195,7 @@ app.delete("/drivers/:id", async (req, res) => {
     res.json({ message: "Conductor eliminado correctamente." });
   } catch (error) {
     console.error("Error al eliminar conductor:", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+    res.status(500).json({ message: "Error interno del servidor.", error });
   }
 });
 //paramdics
