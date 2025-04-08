@@ -17,6 +17,8 @@ const fs = require("fs");
 const path = require("path");
 const { error } = require("console");
 const { validateAmbulancia } = require("./src/utils/validationAmbulancia");
+const { validateParamedico } = require("./src/utils/paramedicValidation");
+const { validateAuxiliar } = require("./src/utils/auxiliarValidation");
 
 const app = express();
 app.use(bodyParser.json());
@@ -199,6 +201,127 @@ app.delete("/drivers/:id", async (req, res) => {
   }
 });
 //paramdics
+app.post("/paramedics/add", async (req, res) => {
+  try {
+    const data = req.body;
+
+    const validation = await validateParamedico(data, prisma);
+    if (!validation.isValid) {
+      return res.status(400).json({ message: validation.error });
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    const nuevoParamedico = await prisma.paramedico.create({
+      data: {
+        name: data.name,
+        last_name: data.last_name,
+        document: data.document,
+        tipo_medic: data.tipo_medic,
+        no_ci_medic: data.no_ci_medic,
+        id_capacitation: data.id_capacitation,
+        password: hashedPassword,
+        role: data.role,
+      },
+    });
+
+    res.status(201).json(nuevoParamedico);
+  } catch (error) {
+    console.error("Error al agregar paramédico:", error);
+    res.status(500).json({ error: "Error interno al agregar paramédico." });
+  }
+});
+app.get("/paramedics", async (req, res) => {
+  try {
+    const paramedicos = await prisma.paramedico.findMany();
+    res.json(paramedicos);
+  } catch (error) {
+    console.error("Error al obtener paramédicos:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+});
+
+app.delete("/paramedics/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const paramedico = await prisma.paramedico.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!paramedico) {
+      return res.status(404).json({ message: "Paramédico no encontrado." });
+    }
+
+    await prisma.paramedico.delete({ where: { id: parseInt(id) } });
+    res.json({ message: "Paramédico eliminado correctamente." });
+  } catch (error) {
+    console.error("Error al eliminar paramédico:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+});
+
+//auxiliar
+app.post("/auxiliares/add", async (req, res) => {
+  try {
+    const data = req.body;
+
+    const validation = await validateAuxiliar(data, prisma);
+    if (!validation.isValid) {
+      return res.status(400).json({ message: validation.error });
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    const nuevoAuxiliar = await prisma.auxiliar.create({
+      data: {
+        name: data.name,
+        last_name: data.last_name,
+        document: data.document,
+        no_ci_auxiliar: data.no_ci_auxiliar,
+        no_ci_soporte_vital: data.no_ci_soporte_vital,
+        password: hashedPassword,
+      },
+    });
+
+    res.status(201).json(nuevoAuxiliar);
+  } catch (error) {
+    console.error("Error al agregar auxiliar:", error);
+    res.status(500).json({ error: "Error interno al agregar auxiliar." });
+  }
+});
+
+// Obtener todos los auxiliares
+app.get("/auxiliares", async (req, res) => {
+  try {
+    const auxiliares = await prisma.auxiliar.findMany();
+    res.json(auxiliares);
+  } catch (error) {
+    console.error("Error al obtener auxiliares:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+});
+
+// Eliminar auxiliar por ID
+app.delete("/auxiliares/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const auxiliar = await prisma.auxiliar.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!auxiliar) {
+      return res.status(404).json({ message: "Auxiliar no encontrado." });
+    }
+
+    await prisma.auxiliar.delete({ where: { id: parseInt(id) } });
+    res.json({ message: "Auxiliar eliminado correctamente." });
+  } catch (error) {
+    console.error("Error al eliminar auxiliar:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+});
 
 ////////////
 
