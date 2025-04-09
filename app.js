@@ -1,7 +1,11 @@
 require("dotenv").config();
 const express = require("express");
-const swaggerJsdoc = require("swagger-jsdoc");
+
 const swaggerUi = require("swagger-ui-express");
+
+const swaggerSpec = require("./src/swaggerConfig"); // solo configuración
+const swaggerDocs = require("./src/swagger/swaggerDocs"); // solo renderizado
+
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
@@ -29,6 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(loggerMiddlewares);
 app.use(errorHandler);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const PORT = process.env.PORT || 3000;
 
@@ -46,9 +51,6 @@ const swaggerOptions = {
   },
   apis: ["app.js"], // Aquí pones la ruta donde están tus endpoints
 };
-
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get("/", (req, res) => {
   res.send(`BIENVENIDOS`);
@@ -69,33 +71,39 @@ app.get("/protectedRoute", authenticateToken, (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { document, password } = req.body;
 
-  const validation = await validateLoginData({ username, password }, prisma);
+  const validation = await validateLoginData({ document, password }, prisma);
   if (!validation.isValid) {
-    console.log("error fue", validation.error);
+    console.log("Validation error:", validation.error);
     return res.status(400).json({ message: validation.error });
   }
 
   try {
-    const user = await prisma.usuario.findFirst({ where: { username } });
-    console.log("user fue", user);
-    if (!user) {
-      return res.status(400).json({ error: "Usuario o contraseña inválida." });
+    const paramedico = await prisma.paramedico.findFirst({
+      where: { document },
+    });
+    console.log("paramedico encontrado:", paramedico);
+
+    if (!paramedico) {
+      return res
+        .status(400)
+        .json({ error: "Documento o contraseña inválidos." });
     }
 
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, paramedico.password);
     if (!validPassword) {
-      return res.status(400).json({ error: "Usuario o contraseña inválida." });
+      return res
+        .status(400)
+        .json({ error: "Documento o contraseña inválidos." });
     }
 
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: paramedico.id, role: paramedico.role },
       process.env.JWT_SECRET,
       { expiresIn: "4h" }
     );
-
-    res.status(200).json({ token });
+    res.json({ token, user: paramedico });
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
     res.status(500).json({ error: "Error del servidor al iniciar sesión." });
@@ -689,6 +697,7 @@ app.get("/error", (req, res, next) => {
   next(new Error("Error Fabricado"));
 });
 
+swaggerDocs(app, swaggerSpec); // <-- renderiza
 app.listen(PORT, () => {
   console.log(`server http://localhost:${PORT}`);
 });
