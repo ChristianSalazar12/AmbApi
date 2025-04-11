@@ -13,7 +13,7 @@ const createParamedicService = async (
   password
 ) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newParamedic = await prisma.paramedic.create({
+  const newParamedic = await prisma.paramedico.create({
     data: {
       name,
       last_name,
@@ -27,11 +27,11 @@ const createParamedicService = async (
   return newParamedic;
 };
 const getParamedicService = async () => {
-  const paramedics = await prisma.paramedic.findMany();
+  const paramedics = await prisma.paramedico.findMany();
   return paramedics;
 };
 const deleteParamedicService = async (id) => {
-  const deletedParamedic = await prisma.paramedic.delete({
+  const deletedParamedic = await prisma.paramedico.delete({
     where: { id },
   });
   return deletedParamedic;

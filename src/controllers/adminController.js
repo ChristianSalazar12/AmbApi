@@ -37,8 +37,11 @@ const createParamedic = async (req, res) => {
 
 const getParamedic = async (req, res) => {
   if (req.user.role !== "ADMIN") {
+    console.log("User role:", req.user.role); //
+    //👈
     return res.status(403).json({ error: "Access Denied" });
   }
+
   try {
     const paramedics = await getParamedicService();
     return res.status(200).json(paramedics);
@@ -48,7 +51,7 @@ const getParamedic = async (req, res) => {
 };
 
 const getParamedicById = async (req, res) => {
-  if (req.user.role !== "admin") {
+  if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Access Denied" });
   }
   const { id } = req.params;
@@ -60,7 +63,7 @@ const getParamedicById = async (req, res) => {
   }
 };
 const deleteParamedic = async (req, res) => {
-  if (req.user.role !== "admin") {
+  if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Access Denied" });
   }
   const { id } = req.params;
@@ -72,7 +75,7 @@ const deleteParamedic = async (req, res) => {
   }
 };
 const modificParamedic = async (req, res) => {
-  if (req.user.role !== "admin") {
+  if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Access Denied" });
   }
   const { id } = req.params;

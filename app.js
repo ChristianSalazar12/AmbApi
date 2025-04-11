@@ -35,7 +35,7 @@ app.use(loggerMiddlewares);
 app.use(errorHandler);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 //swagger por ahora
 
@@ -698,6 +698,7 @@ app.get("/error", (req, res, next) => {
 });
 
 swaggerDocs(app, swaggerSpec); // <-- renderiza
-app.listen(PORT, () => {
-  console.log(`server http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server starting 1 in http://localhost:${PORT}`);
+// });
+module.exports = app;
