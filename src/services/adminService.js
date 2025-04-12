@@ -22,8 +22,10 @@ const createParamedicService = async (
       no_ci_medic,
       id_capacitation,
       password: hashedPassword,
+      role: "USER",
     },
   });
+  console.log("New paramedic created:", newParamedic); // 👈
   return newParamedic;
 };
 const getParamedicService = async () => {

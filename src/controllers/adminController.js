@@ -1,3 +1,6 @@
+const { PrismaClient } = require("@prisma/client");
+const Prisma = new PrismaClient();
+
 const {
   createParamedicService,
   getParamedicService,
@@ -5,32 +8,31 @@ const {
   modificateParamedicService,
   getParamedicByIdService,
 } = require("../services/adminService");
+const { validateParamedico } = require("../utils/paramedicsValidation");
 
 const createParamedic = async (req, res) => {
   if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Access Denied" });
   }
-  const {
-    name,
-    last_name,
-    document,
-    tipo_medic,
-    no_ci_medic,
-    id_capacitation,
-    password,
-  } = req.body;
+  const data = req.body;
+  const validation = await validateParamedico(data, Prisma);
+  if (!validation.isValid) {
+    return res.status(400).json({ error: validation.error });
+  }
   try {
     const newParamedic = await createParamedicService(
-      name,
-      last_name,
-      document,
-      tipo_medic,
-      no_ci_medic,
-      id_capacitation,
-      password
+      data.name,
+      data.last_name,
+      data.document,
+      data.tipo_medic,
+      data.no_ci_medic,
+      data.id_capacitation,
+      data.password,
+      data.role
     );
     return res.status(201).json(newParamedic);
   } catch (error) {
+    console.log("Error creating paramedic:", error); // 👈
     return res.status(500).json({ error: error.message });
   }
 };
