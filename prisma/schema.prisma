@@ -113,7 +113,6 @@ model Turnos {
   auxiliarId    Int
   conductorId   Int
   ambulanciaId  Int
-
   paramedico    Paramedico @relation(fields: [paramedicId], references: [id])
   auxiliar      Auxiliar   @relation(fields: [auxiliarId], references: [id])
   conductor     Conductor  @relation(fields: [conductorId], references: [id])

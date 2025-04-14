@@ -1,7 +1,8 @@
-async function validateDescripcion(data, prisma) {
+async function validateDescription(data, prisma) {
   const { description, type_context, implicados, servicioId } = data;
 
   if (!description || description.trim() === "") {
+    console.log("description", description);
     return { isValid: false, error: "La descripción es obligatoria." };
   }
 
@@ -21,6 +22,8 @@ async function validateDescripcion(data, prisma) {
     where: { id: servicioId },
   });
   if (!servicio) {
+    console.log("servicio", servicio);
+    console.log("servicioId", servicioId);
     return { isValid: false, error: "El servicio no existe." };
   }
 
@@ -34,4 +37,4 @@ async function validateDescripcion(data, prisma) {
   return { isValid: true };
 }
 
-module.exports = { validateDescripcion };
+module.exports = { validateDescription };

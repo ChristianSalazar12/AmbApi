@@ -1,4 +1,4 @@
-async function validateTurno(data, prisma) {
+async function validateShift(data, prisma) {
   const {
     time_start,
     time_end,
@@ -45,4 +45,4 @@ async function validateTurno(data, prisma) {
   return { isValid: true };
 }
 
-module.exports = { validateTurno };
+module.exports = { validateShift };

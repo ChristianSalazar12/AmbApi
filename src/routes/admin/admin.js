@@ -10,15 +10,22 @@ const {
   getAssistantById,
   deleteAssistant,
   modificAssistant,
-} = require("../controllers/admin/adminController");
-const authenticateToken = require("../middlewares/auth");
+} = require("../../controllers/admin/adminController");
+const authenticateToken = require("../../middlewares/auth");
 const {
   createDriver,
   getDriver,
   deleteDriver,
   modificDriver,
   getDriverById,
-} = require("../controllers/admin/controllers/driverController");
+} = require("../../controllers/admin/controllers/driverController");
+const {
+  createShift,
+  getShift,
+  getShiftById,
+  deleteShift,
+  modificShift,
+} = require("../../controllers/admin/controllers/shiftController");
 const router = Router();
 router.use(authenticateToken);
 
@@ -39,5 +46,11 @@ router.get("/assistant", getAssistant);
 router.get("/assistant/:id", getAssistantById);
 router.delete("/assistant/:id", deleteAssistant);
 router.put("/assistant/:id", modificAssistant);
+
+router.post("/shift/add", createShift);
+router.get("/shift", getShift);
+router.get("/shift/:id", getShiftById);
+router.delete("/shift/:id", deleteShift);
+router.put("/shift/:id", modificShift);
 
 module.exports = router;

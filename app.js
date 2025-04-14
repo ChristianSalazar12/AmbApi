@@ -438,8 +438,6 @@ app.delete("/shifts/:id", async (req, res) => {
   }
 });
 
-//descripcion
-
 app.post("/description/add", async (req, res) => {
   try {
     const data = req.body;
