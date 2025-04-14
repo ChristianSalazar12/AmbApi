@@ -5,6 +5,11 @@ const {
   deleteParamedic,
   modificParamedic,
   getParamedicById,
+  createAssistant,
+  getAssistant,
+  getAssistantById,
+  deleteAssistant,
+  modificAssistant,
 } = require("../controllers/admin/adminController");
 const authenticateToken = require("../middlewares/auth");
 const {
@@ -28,5 +33,11 @@ router.get("/driver", getDriver);
 router.get("/driver/:id", getDriverById);
 router.delete("/driver/:id", deleteDriver);
 router.put("/driver/:id", modificDriver);
+
+router.post("/assistant/add", createAssistant);
+router.get("/assistant", getAssistant);
+router.get("/assistant/:id", getAssistantById);
+router.delete("/assistant/:id", deleteAssistant);
+router.put("/assistant/:id", modificAssistant);
 
 module.exports = router;
