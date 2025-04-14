@@ -7,8 +7,8 @@ const {
   deleteParamedicService,
   modificateParamedicService,
   getParamedicByIdService,
-} = require("../services/adminService");
-const { validateParamedico } = require("../utils/paramedicsValidation");
+} = require("../../services/adminService");
+const { validateParamedico } = require("../../utils/paramedicsValidation");
 
 const createParamedic = async (req, res) => {
   if (req.user.role !== "ADMIN") {
@@ -32,11 +32,9 @@ const createParamedic = async (req, res) => {
     );
     return res.status(201).json(newParamedic);
   } catch (error) {
-    console.log("Error creating paramedic:", error); // 👈
     return res.status(500).json({ error: error.message });
   }
 };
-
 const getParamedic = async (req, res) => {
   if (req.user.role !== "ADMIN") {
     console.log("User role:", req.user.role); //
@@ -51,7 +49,6 @@ const getParamedic = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-
 const getParamedicById = async (req, res) => {
   if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Access Denied" });
@@ -71,7 +68,7 @@ const deleteParamedic = async (req, res) => {
   const { id } = req.params;
   try {
     await deleteParamedicService(id);
-    return res.status(204).send();
+    return res.status(204).json({ message: "Paramedic deleted successfully" });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -103,6 +100,7 @@ const modificParamedic = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 module.exports = {
   createParamedic,
   getParamedic,

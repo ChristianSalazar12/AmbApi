@@ -5,8 +5,15 @@ const {
   deleteParamedic,
   modificParamedic,
   getParamedicById,
-} = require("../controllers/adminController");
+} = require("../controllers/admin/adminController");
 const authenticateToken = require("../middlewares/auth");
+const {
+  createDriver,
+  getDriver,
+  deleteDriver,
+  modificDriver,
+  getDriverById,
+} = require("../controllers/admin/controllers/driverController");
 const router = Router();
 router.use(authenticateToken);
 
@@ -15,5 +22,11 @@ router.get("/paramedic", getParamedic);
 router.get("/paramedic/:id", getParamedicById);
 router.delete("/paramedic/:id", deleteParamedic);
 router.put("/paramedic/:id", modificParamedic);
+
+router.post("/driver/add", createDriver);
+router.get("/driver", getDriver);
+router.get("/driver/:id", getDriverById);
+router.delete("/driver/:id", deleteDriver);
+router.put("/driver/:id", modificDriver);
 
 module.exports = router;

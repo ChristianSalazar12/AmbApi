@@ -10,7 +10,7 @@ function authenticateToken(req, res, next) {
     return res.status(401).json({ error: "Access Denied, no token Provided" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: "Invalid Token" });
+    if (err) return res.status(403).json({ error: "Invalid Token or expired" });
     req.user = user;
     next();
   });

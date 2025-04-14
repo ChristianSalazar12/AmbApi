@@ -25,7 +25,7 @@ const createParamedicService = async (
       role: "USER",
     },
   });
-  console.log("New paramedic created:", newParamedic); // 👈
+
   return newParamedic;
 };
 const getParamedicService = async () => {
@@ -34,23 +34,31 @@ const getParamedicService = async () => {
 };
 const deleteParamedicService = async (id) => {
   const deletedParamedic = await prisma.paramedico.delete({
-    where: { id },
+    where: { id: parseInt(id) },
   });
   return deletedParamedic;
 };
 const modificateParamedicService = async (id, data) => {
-  const updatedParamedic = await prisma.paramedic.update({
-    where: { id },
-    data,
+  const updatedParamedic = await prisma.paramedico.update({
+    where: { id: parseInt(id) },
+    data: {
+      name: data.name,
+      last_name: data.last_name,
+      tipo_medic: data.tipo_medic,
+      no_ci_medic: data.no_ci_medic,
+      id_capacitation: data.id_capacitation,
+      password: data.password,
+    },
   });
   return updatedParamedic;
 };
 const getParamedicByIdService = async (id) => {
-  const paramedic = await prisma.paramedic.findUnique({
-    where: { id },
+  const paramedic = await prisma.paramedico.findUnique({
+    where: { id: parseInt(id) },
   });
   return paramedic;
 };
+
 module.exports = {
   createParamedicService,
   getParamedicService,
