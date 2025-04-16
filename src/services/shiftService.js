@@ -41,29 +41,21 @@ const deleteShiftService = async (id) => {
   });
   return shift;
 };
-const modificShiftService = async (
-  id,
-  time_start,
-  time_end,
-  paramedicId,
-  auxiliarId,
-  conductorId,
-  ambulanciaId
-) => {
-  const shift = await prisma.turnos.update({
+const modificShiftService = async (id, data) => {
+  const updatedShift = await prisma.turnos.update({
     where: {
-      id: Number(id),
+      id: parseInt(id),
     },
     data: {
-      time_start: new Date(time_start),
-      time_end: new Date(time_end),
-      paramedicId: parseInt(paramedicId),
-      auxiliarId: parseInt(auxiliarId),
-      conductorId: parseInt(conductorId),
-      ambulanciaId: parseInt(ambulanciaId),
+      time_start: new Date(data.time_start),
+      time_end: new Date(data.time_end),
+      paramedicId: parseInt(data.paramedicId),
+      auxiliarId: parseInt(data.auxiliarId),
+      conductorId: parseInt(data.conductorId),
+      ambulanciaId: parseInt(data.ambulanciaId),
     },
   });
-  return shift;
+  return updatedShift;
 };
 
 module.exports = {

@@ -4,6 +4,7 @@ const {
   createShiftService,
   getShiftByIdService,
   deleteShiftService,
+  modificShiftService,
 } = require("../../../services/shiftService");
 const { validateShift } = require("../../../utils/shifts.validation");
 const Prisma = new PrismaClient();
@@ -73,6 +74,7 @@ const deleteShift = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+//it not add yet, but it will be added in the future
 const modificShift = async (req, res) => {
   if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Access Denied" });
@@ -80,19 +82,16 @@ const modificShift = async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
-    const shift = await Prisma.turnos.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        fecha_inicio: data.fecha_inicio,
-        fecha_fin: data.fecha_fin,
-        conductorId: data.conductorId,
-        vehiculoId: data.vehiculoId,
-        servicioId: data.servicioId,
-      },
-    });
-    return res.status(200).json(shift);
+    const updatedShift = await modificShiftService(
+      id,
+      data.time_start,
+      data.time_end,
+      data.paramedicId,
+      data.auxiliarId,
+      data.conductorId,
+      data.ambulanciaId
+    );
+    return res.status(200).json(updatedShift);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
