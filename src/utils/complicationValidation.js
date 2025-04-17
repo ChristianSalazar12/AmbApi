@@ -1,4 +1,4 @@
-async function validateComplicacion(data, prisma) {
+async function validateComplication(data, prisma) {
   const { type, description, id_servicio } = data;
 
   if (!type || type.trim() === "") {
@@ -24,4 +24,4 @@ async function validateComplicacion(data, prisma) {
   return { isValid: true };
 }
 
-module.exports = { validateComplicacion };
+module.exports = { validateComplication };
