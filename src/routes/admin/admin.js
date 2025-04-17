@@ -26,6 +26,13 @@ const {
   deleteShift,
   modificShift,
 } = require("../../controllers/admin/controllers/shiftController");
+const {
+  getAmbulance,
+  createAmbulance,
+  getAmbulanceById,
+  deleteAmbulance,
+  modificAmbulance,
+} = require("../../controllers/admin/controllers/ambulanceController");
 const router = Router();
 router.use(authenticateToken);
 
@@ -52,5 +59,11 @@ router.get("/shift", getShift);
 router.get("/shift/:id", getShiftById);
 router.delete("/shift/:id", deleteShift);
 router.put("/shift/:id", modificShift);
+
+router.post("/ambulance/add", createAmbulance);
+router.get("/ambulance", getAmbulance);
+router.get("/ambulance/:id", getAmbulanceById);
+router.delete("/ambulance/:id", deleteAmbulance);
+router.put("/ambulance/:id", modificAmbulance);
 
 module.exports = router;

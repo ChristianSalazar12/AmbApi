@@ -26,7 +26,7 @@ const { validateAuxiliar } = require("./src/utils/auxiliarValidation");
 const { validateTurno } = require("./src/utils/shifts.validation");
 const { validateDescripcion } = require("./src/utils/descriptionValidation");
 const { validateComplicacion } = require("./src/utils/complicationValidation");
-const { validateServicio } = require("./src/utils/servicioValidation");
+const { validateServicio } = require("./src/utils/serviceValidation");
 
 const app = express();
 app.use(bodyParser.json());

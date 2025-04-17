@@ -8,9 +8,6 @@ const { connect } = require("../../../../app");
 const Prisma = new PrismaClient();
 
 const createDescription = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
   const data = req.body;
   const validation = await validateDescription(data, Prisma);
   if (!validation.isValid) {
@@ -31,9 +28,6 @@ const createDescription = async (req, res) => {
 };
 
 const getDescription = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
   try {
     const descriptions = await getDescriptionService();
     return res.status(200).json(descriptions);
@@ -66,7 +60,7 @@ const deleteDescription = async (req, res) => {
         id: Number(id),
       },
     });
-    return res.status(200).json(description);
+    return res.status(204).json(description);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
