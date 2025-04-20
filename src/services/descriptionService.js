@@ -4,19 +4,15 @@ const prisma = new PrismaClient();
 const createDescriptionService = async (
   description,
   type_context,
-  implicados,
-  servicioId
+  implicados
 ) => {
   const newDescription = await prisma.descripcion.create({
     data: {
       description,
       type_context,
       implicados,
-      servicioId: parseInt(servicioId),
     },
   });
-  console.log("nuevaDescripcion fue", nuevaDescripcion);
-
   return newDescription;
 };
 

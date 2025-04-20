@@ -20,6 +20,15 @@ async function ambulanceValidation(data, Prisma) {
   if (placarepetido) {
     return { isValid: false, error: "Plate already exists" };
   }
+  const ips = await Prisma.ips.findUnique({
+    where: {
+      id: ipsId,
+    },
+  });
+  if (!ips) {
+    return { isValid: false, error: "IPS not found" };
+  }
+
   return { isValid: true };
 }
 

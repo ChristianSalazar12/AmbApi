@@ -1,5 +1,5 @@
 async function validateDescription(data, prisma) {
-  const { description, type_context, implicados, servicioId } = data;
+  const { description, type_context, implicados } = data;
 
   if (!description || description.trim() === "") {
     console.log("description", description);
@@ -12,26 +12,6 @@ async function validateDescription(data, prisma) {
 
   if (!implicados || implicados.trim() === "") {
     return { isValid: false, error: "Los implicados son obligatorios." };
-  }
-
-  if (!servicioId) {
-    return { isValid: false, error: "Se requiere el ID del servicio." };
-  }
-
-  const servicio = await prisma.servicio.findUnique({
-    where: { id: servicioId },
-  });
-  if (!servicio) {
-    console.log("servicio", servicio);
-    console.log("servicioId", servicioId);
-    return { isValid: false, error: "El servicio no existe." };
-  }
-
-  if (servicio.id_descripcion) {
-    return {
-      isValid: false,
-      error: "Este servicio ya tiene una descripción asociada.",
-    };
   }
 
   return { isValid: true };

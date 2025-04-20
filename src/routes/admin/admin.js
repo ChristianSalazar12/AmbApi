@@ -33,6 +33,10 @@ const {
   deleteAmbulance,
   modificAmbulance,
 } = require("../../controllers/admin/controllers/ambulanceController");
+const {
+  getIps,
+  createIps,
+} = require("../../controllers/admin/controllers/ipsController");
 const router = Router();
 router.use(authenticateToken);
 
@@ -66,4 +70,11 @@ router.get("/ambulance/:id", getAmbulanceById);
 router.delete("/ambulance/:id", deleteAmbulance);
 router.put("/ambulance/:id", modificAmbulance);
 
+router.post("/ips/add", createIps);
+router.get("/ips", getIps);
+/*
+router.get("/ips/:id", getIpsById);
+router.delete("/ips/:id", deleteIps);
+router.put("/ips/:id", modificIps);
+*/
 module.exports = router;

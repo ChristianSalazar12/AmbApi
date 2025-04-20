@@ -4,11 +4,12 @@ const {
   getDescriptionService,
 } = require("../../../services/descriptionService");
 const { validateDescription } = require("../../../utils/descriptionValidation");
-const { connect } = require("../../../../app");
+
 const Prisma = new PrismaClient();
 
 const createDescription = async (req, res) => {
   const data = req.body;
+
   const validation = await validateDescription(data, Prisma);
   if (!validation.isValid) {
     return res.status(400).json({ error: validation.error });
@@ -17,13 +18,14 @@ const createDescription = async (req, res) => {
     const newDescription = await createDescriptionService(
       data.description,
       data.type_context,
-      data.implicados,
-      data.servicioId ? { connect: { id: data.servicioId } } : undefined
+      data.implicados
     );
-    console.log("nuevaDescripcion fue", newDescription);
+    console.log("New description created", newDescription);
+
     return res.status(201).json(newDescription);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error("Error creating description controller:", error);
+    res.status(500).json({ error: error.message });
   }
 };
 

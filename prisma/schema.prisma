@@ -47,11 +47,11 @@ model Servicio {
   nro_informe     String
   id_turno        Int
   id_paciente     Int
-  id_descripcion  Int @unique
+  id_descripcion  Int 
   complicacion    Complicacion[]
   turno           Turnos    @relation(fields: [id_turno], references: [id])
   paciente        Pacientes @relation(fields: [id_paciente], references: [id])
-  descripcion     Descripcion @relation("descripcionServicio",fields: [id_descripcion], references: [id])
+  descripcion     Descripcion @relation(fields: [id_descripcion], references: [id])
 }
 
 enum Status {
@@ -97,7 +97,7 @@ model Descripcion {
   description  String
   type_context TypeContext
   implicados   String
-  servicio      Servicio? @relation("descripcionServicio")
+  servicio     Servicio[]
 }
 
 enum TypeContext {
