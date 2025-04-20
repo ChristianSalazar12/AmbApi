@@ -1,16 +1,25 @@
-// docs/swaggerConfig.js
+// src/swaggerConfig.js
 const swaggerJSDoc = require("swagger-jsdoc");
 
-const swaggerSpec = swaggerJSDoc({
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "AmbuAPI",
-      version: "1.0.0",
-      description: "Documentación de la API Ambu generada con swagger-jsdoc.",
-    },
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: "AmbuAPI - Documentación",
+    version: "1.0.0",
+    description: "Documentación generada por Swagger para AmbuAPI",
   },
-  apis: ["./routes/*.js", "./src/swagger/swaggerDocs.js"], // Rutas donde estarán los comentarios @swagger
-});
+  servers: [
+    {
+      url: "http://localhost:3000",
+      description: "Servidor local",
+    },
+  ],
+};
 
+const options = {
+  swaggerDefinition,
+  apis: ["./src/routes/**/*.js"], // Ruta correcta según tu estructura
+};
+
+const swaggerSpec = swaggerJSDoc(options);
 module.exports = swaggerSpec;

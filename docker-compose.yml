@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ambuapi
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "3005:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:admin@db:5432/ambuapi
+      PORT: 3000
+      JWT_SECRET: Ambulancia
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm start
+
+volumes:
+  db_data:

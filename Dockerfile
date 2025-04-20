@@ -1,20 +1,23 @@
-# Usa una imagen ligera de Node.js compatible con tu versión local
-FROM node:22-alpine
+# Etapa 1: Builder (para aprovechar el cache)
+FROM node:22-alpine 
 
-# Establece el directorio de trabajo en el contenedor
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de definición de dependencias
+# Copia solo los archivos necesarios para instalar dependencias primero (mejor cache)
 COPY package*.json ./
 
-# Instala las dependencias
+# Instala dependencias
 RUN npm install
 
-# Copia el resto del código fuente
+# Copia el resto del proyecto
 COPY . .
 
-# Expone el puerto en el que corre la app (asegúrate que coincida con process.env.PORT)
+# Genera el Prisma Client (usando el schema y las variables del .env si las necesita)
+RUN npx prisma generate
+
+# Expone el puerto que usa Express (ajústalo si usas otro)
 EXPOSE 3000
 
-# Comando por defecto para iniciar la app
+# Comando para iniciar la app
 CMD ["npm", "start"]

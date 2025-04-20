@@ -5,53 +5,55 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  output   = "./generated/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
- 
+
 enum Role {
   ADMIN
   USER
 }
 
 model Ips {
-  id        Int    @id @default(autoincrement())
-  nombre    String
-  direccion String
+  id          Int          @id @default(autoincrement())
+  nombre      String
+  direccion   String
   ambulancias Ambulancia[]
 }
 
 model Ambulancia {
-  id       Int    @id @default(autoincrement())
-  modelo   String
-  placa    String @unique
-  tipo     String
-  ipsId    Int
-  ips      Ips    @relation(fields: [ipsId], references: [id])
-  turnos   Turnos[]
+  id     Int      @id @default(autoincrement())
+  modelo String
+  placa  String   @unique
+  tipo   String
+  ipsId  Int
+  ips    Ips      @relation(fields: [ipsId], references: [id])
+  turnos Turnos[]
 }
 
 model Servicio {
-  id              Int      @id @default(autoincrement())
-  date            DateTime
-  status          Status
-  time_arrived    DateTime
-  time_finish     DateTime
-  code_start      String
-  code_end        String
-  place_accident  String
-  nro_informe     String
-  id_turno        Int
-  id_paciente     Int
-  id_descripcion  Int 
-  complicacion    Complicacion[]
-  turno           Turnos    @relation(fields: [id_turno], references: [id])
-  paciente        Pacientes @relation(fields: [id_paciente], references: [id])
-  descripcion     Descripcion @relation(fields: [id_descripcion], references: [id])
+  id             Int            @id @default(autoincrement())
+  date           DateTime
+  status         Status
+  time_arrived   DateTime
+  time_finish    DateTime
+  code_start     String
+  code_end       String
+  place_accident String
+  nro_informe    String
+  id_turno       Int
+  id_paciente    Int
+  id_descripcion Int
+  complicacion   Complicacion[]
+  turno          Turnos         @relation(fields: [id_turno], references: [id])
+  paciente       Pacientes      @relation(fields: [id_paciente], references: [id])
+  descripcion    Descripcion    @relation(fields: [id_descripcion], references: [id])
 }
 
 enum Status {
@@ -59,11 +61,13 @@ enum Status {
   COMPLETADO
   CANCELADO
 }
+
 enum TypeServicio {
   URGENCIA
   EMERGENCIA
   PROGRAMADO
 }
+
 enum Typecomplicacion {
   RESPIRATORIA
   CARDIOVASCULAR
@@ -76,24 +80,24 @@ enum Typecomplicacion {
 }
 
 model Complicacion {
-  id          Int    @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   type        Typecomplicacion
   description String
   id_servicio Int
-  servicio    Servicio @relation(fields: [id_servicio], references: [id])
+  servicio    Servicio         @relation(fields: [id_servicio], references: [id])
 }
 
 model Pacientes {
-  id            Int    @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name          String
   last_name     String
-  document      String @unique
+  document      String     @unique
   entidad_salud String
   servicios     Servicio[]
 }
 
 model Descripcion {
-  id           Int    @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   description  String
   type_context TypeContext
   implicados   String
@@ -106,35 +110,35 @@ enum TypeContext {
 }
 
 model Turnos {
-  id            Int    @id @default(autoincrement())
-  time_start    DateTime
-  time_end      DateTime
-  paramedicId   Int
-  auxiliarId    Int
-  conductorId   Int
-  ambulanciaId  Int
-  paramedico    Paramedico @relation(fields: [paramedicId], references: [id])
-  auxiliar      Auxiliar   @relation(fields: [auxiliarId], references: [id])
-  conductor     Conductor  @relation(fields: [conductorId], references: [id])
-  ambulancia    Ambulancia @relation(fields: [ambulanciaId], references: [id])
-  servicios     Servicio[]
+  id           Int        @id @default(autoincrement())
+  time_start   DateTime
+  time_end     DateTime
+  paramedicId  Int
+  auxiliarId   Int
+  conductorId  Int
+  ambulanciaId Int
+  paramedico   Paramedico @relation(fields: [paramedicId], references: [id])
+  auxiliar     Auxiliar   @relation(fields: [auxiliarId], references: [id])
+  conductor    Conductor  @relation(fields: [conductorId], references: [id])
+  ambulancia   Ambulancia @relation(fields: [ambulanciaId], references: [id])
+  servicios    Servicio[]
 }
 
 model Conductor {
-  id             Int    @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   name           String
   last_name      String
-  document       String @unique
+  document       String   @unique
   no_licencia    String
   no_fast_driver String
   turnos         Turnos[]
 }
 
 model Paramedico {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   name            String
   last_name       String
-  document        String @unique
+  document        String   @unique
   tipo_medic      String
   no_ci_medic     String
   id_capacitation String
@@ -144,14 +148,13 @@ model Paramedico {
 }
 
 model Auxiliar {
-  id                   Int    @id @default(autoincrement())
-  name                 String
-  last_name            String
-  document             String @unique
-  no_ci_auxiliar       String
-  no_ci_soporte_vital  String
-  turnos               Turnos[]
+  id                  Int      @id @default(autoincrement())
+  name                String
+  last_name           String
+  document            String   @unique
+  no_ci_auxiliar      String
+  no_ci_soporte_vital String
+  turnos              Turnos[]
   password            String
   role                Role
- 
 }
