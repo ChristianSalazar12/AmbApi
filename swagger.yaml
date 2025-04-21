@@ -30,8 +30,13 @@ tags:
   - name: "IPS"
     description: "Operaciones de ips"
   - name: "Shifts"
-    description: "Operaciones de tuenos"
-   
+    description: "Operaciones de turnos"
+  - name: "Services"
+    description: "Operaciones de Servicio"
+  - name: "Descriptions"
+    description: "Operaciones de Descripciones"
+  - name: "Patients"
+    description: "Operaciones de Pacientes"
   - name: "user"
     description: "Operaciones del usuario"
  
@@ -727,6 +732,269 @@ paths:
           description: Turno actualizado exitosamente
         '403':
           description: Acceso denegado
+        '500':
+          description: Error del servidor
+
+  api/user/attention/add:
+    post:
+      tags:
+        - Services
+      summary: Crear un nuevo servicio de atención
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceInput'
+      responses:
+        '201':
+          description: Servicio creado exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+
+  api/user/attention:
+    get:
+      tags:
+        - Services
+      summary: Obtener todos los servicios de atención
+      responses:
+        '200':
+          description: Lista de servicios
+        '500':
+          description: Error del servidor
+
+  api/user/attention/{id}:
+    get:
+      tags:
+        - Services
+      summary: Obtener un servicio por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Servicio encontrado
+        '404':
+          description: Servicio no encontrado
+        '500':
+          description: Error del servidor
+
+    put:
+      tags:
+        - Services
+      summary: Actualizar un servicio por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceInput'
+      responses:
+        '200':
+          description: Servicio actualizado exitosamente
+        '500':
+          description: Error del servidor
+
+    delete:
+      tags:
+        - Services
+      summary: Eliminar un servicio por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Servicio eliminado exitosamente
+        '500':
+          description: Error del servidor
+
+  api/user/description/add:
+    post:
+      tags:
+        - Descriptions
+      summary: Crear una nueva descripción de incidente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DescriptionInput'
+      responses:
+        '201':
+          description: Descripción creada exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+  api/user/description:
+    get:
+      tags:
+        - Descriptions
+      summary: Obtener todas las descripciones
+      responses:
+        '200':
+          description: Lista de descripciones
+        '500':
+          description: Error del servidor
+
+  api/user/description/{id}:
+    get:
+      tags:
+        - Descriptions
+      summary: Obtener una descripción por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Descripción encontrada
+        '404':
+          description: Descripción no encontrada
+        '500':
+          description: Error del servidor
+
+    put:
+      tags:
+        - Descriptions
+      summary: Actualizar una descripción
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+              required:
+                - description
+      responses:
+        '200':
+          description: Descripción actualizada
+        '500':
+          description: Error del servidor
+
+    delete:
+      tags:
+        - Descriptions
+      summary: Eliminar una descripción
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Descripción eliminada
+        '500':
+          description: Error del servidor
+
+  api/user/patient/add:
+    post:
+      tags:
+        - Patients
+      summary: Crear un nuevo paciente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientInput'
+      responses:
+        '201':
+          description: Paciente creado exitosamente
+        '400':
+          description: Error de validación o fallo al crear
+        '500':
+          description: Error del servidor
+
+  api/user/patient:
+    get:
+      tags:
+        - Patients
+      summary: Obtener todos los pacientes
+      responses:
+        '200':
+          description: Lista de pacientes
+        '500':
+          description: Error del servidor
+
+  api/user/patient/{id}:
+    get:
+      tags:
+        - Patients
+      summary: Obtener paciente por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paciente encontrado
+        '500':
+          description: Error del servidor
+
+    put:
+      tags:
+        - Patients
+      summary: Modificar un paciente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientInput'
+      responses:
+        '200':
+          description: Paciente actualizado
+        '500':
+          description: Error del servidor
+
+    delete:
+      tags:
+        - Patients
+      summary: Eliminar un paciente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Paciente eliminado exitosamente
         '500':
           description: Error del servidor
 
