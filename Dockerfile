@@ -16,6 +16,8 @@ COPY . .
 # Genera el Prisma Client (usando el schema y las variables del .env si las necesita)
 RUN npx prisma generate
 
+# CMD npx prisma migrate deploy && npm run prisma:seed && npm run start
+
 # Expone el puerto que usa Express (ajústalo si usas otro)
 EXPOSE 3000
 

@@ -42,7 +42,7 @@ const createParamedic = async (req, res) => {
   }
 };
 const getParamedic = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
+  if (req.user.role !== "AdMIN") {
     console.log("User role:", req.user.role); //
     //👈
     return res.status(403).json({ error: "Access Denied" });

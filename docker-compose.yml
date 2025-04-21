@@ -26,7 +26,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    command: npm start
+    command: "npm start"
 
 volumes:
   db_data:

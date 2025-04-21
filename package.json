@@ -6,7 +6,9 @@
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:seed": "node prisma/seed.js"
   },
   "keywords": [],
   "author": "Christian Salazar <cristianyamith@hotmail.com>",
@@ -14,7 +16,7 @@
   "description": "ambu api",
   "dependencies": {
     "@prisma/client": "^6.6.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

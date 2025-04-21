@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const createParamedicService = async (
   name,
@@ -22,7 +22,7 @@ const createParamedicService = async (
       no_ci_medic,
       id_capacitation,
       password: hashedPassword,
-      role: "USER",
+      role: "ADMIN",
     },
   });
 

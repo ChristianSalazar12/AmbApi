@@ -247,7 +247,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/christian/Documentos/aplicativo/ambuApi/prisma/generated/client",
+      "value": "/app/prisma/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -256,7 +256,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "linux-musl-openssl-3.0.x",
         "native": true
       },
       {
@@ -265,11 +265,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/christian/Documentos/aplicativo/ambuApi/prisma/schema.prisma",
+    "sourceFilePath": "/app/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../..",

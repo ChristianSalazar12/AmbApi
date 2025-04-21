@@ -36,6 +36,9 @@ const {
 const {
   getIps,
   createIps,
+  deleteIps,
+  updateIps,
+  getIpsById,
 } = require("../../controllers/admin/controllers/ipsController");
 const router = Router();
 router.use(authenticateToken);
@@ -72,9 +75,8 @@ router.put("/ambulance/:id", modificAmbulance);
 
 router.post("/ips/add", createIps);
 router.get("/ips", getIps);
-/*
 router.get("/ips/:id", getIpsById);
 router.delete("/ips/:id", deleteIps);
-router.put("/ips/:id", modificIps);
-*/
+router.put("/ips/:id", updateIps);
+
 module.exports = router;

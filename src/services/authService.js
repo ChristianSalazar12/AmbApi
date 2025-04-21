@@ -1,16 +1,28 @@
 const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
-const register = async (name, last_name, document, password) => {
+const register = async (
+  name,
+  last_name,
+  document,
+  tipo_medic,
+  no_ci_medic,
+  id_capacitation,
+  password
+) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await prisma.paramedico.create({
     data: {
       name,
       last_name,
       document,
+      tipo_medic,
+      no_ci_medic,
+      id_capacitation,
       password: hashedPassword,
+      role: "USER",
     },
   });
   return newUser;
@@ -26,7 +38,7 @@ const login = async (document, password) => {
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    throw new Error("Invalid credentials");
+    throw new Error("Invalid credentials here");
   }
 
   const token = jwt.sign(
@@ -39,7 +51,14 @@ const login = async (document, password) => {
 
   return token;
 };
+
+const getAllUsers = async () => {
+  const users = await prisma.paramedico.findMany();
+  return users;
+};
+
 module.exports = {
   register,
   login,
+  getAllUsers,
 };
