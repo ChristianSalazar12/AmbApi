@@ -403,7 +403,7 @@ paths:
           description: Acceso denegado.
         '500':
           description: Error interno del servidor.
-  api/admin/driver/add:
+  /api/admin/driver/add:
     post:
       tags:
         - Drivers
@@ -443,7 +443,7 @@ paths:
         '500':
           description: Error del servidor
   
-  api/admin/driver:
+  /api/admin/driver:
     get:
       tags:
         - Drivers
@@ -458,7 +458,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/admin/driver/{id}:
+  /api/admin/driver/{id}:
     get:
       tags:
         - Drivers
@@ -542,7 +542,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/admin/ips/add:
+  /api/admin/ips/add:
     post:
       tags:
         - IPS
@@ -559,7 +559,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/admin/ips:
+  /api/admin/ips:
     get:
       tags:
         - IPS
@@ -570,7 +570,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/admin/ips/{id}:
+  /api/admin/ips/{id}:
     get:
       tags:
         - IPS
@@ -627,7 +627,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/admin/shift/add:
+  /api/admin/shift/add:
     post:
       tags:
         - Shifts
@@ -649,7 +649,7 @@ paths:
           description: Acceso denegado
         '500':
           description: Error del servidor
-  api/admin/ahift:
+  /api/admin/ahift:
     get:
       tags:
         - Shifts
@@ -664,7 +664,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/admin/shift/{id}:
+  /api/admin/shift/{id}:
     get:
       tags:
         - Shifts
@@ -735,7 +735,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/attention/add:
+  /api/user/attention/add:
     post:
       tags:
         - Services
@@ -754,7 +754,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/attention:
+  /api/user/attention:
     get:
       tags:
         - Services
@@ -765,7 +765,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/attention/{id}:
+  /api/user/attention/{id}:
     get:
       tags:
         - Services
@@ -822,7 +822,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/description/add:
+  /api/user/description/add:
     post:
       tags:
         - Descriptions
@@ -840,7 +840,7 @@ paths:
           description: Error de validación
         '500':
           description: Error del servidor
-  api/user/description:
+  /api/user/description:
     get:
       tags:
         - Descriptions
@@ -851,7 +851,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/description/{id}:
+  /api/user/description/{id}:
     get:
       tags:
         - Descriptions
@@ -913,7 +913,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/patient/add:
+  /api/user/patient/add:
     post:
       tags:
         - Patients
@@ -932,7 +932,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/patient:
+  /api/user/patient:
     get:
       tags:
         - Patients
@@ -943,7 +943,7 @@ paths:
         '500':
           description: Error del servidor
 
-  api/user/patient/{id}:
+  /api/user/patient/{id}:
     get:
       tags:
         - Patients
