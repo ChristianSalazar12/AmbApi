@@ -25,7 +25,13 @@ tags:
     description: "Operaciones de asistentes"
   - name: "ambulance"
     description: "Operaciones de ambulancias"
-
+  - name: "Drivers"
+    description: "Operaciones de conductores"
+  - name: "IPS"
+    description: "Operaciones de ips"
+  - name: "Shifts"
+    description: "Operaciones de tuenos"
+   
   - name: "user"
     description: "Operaciones del usuario"
  
@@ -392,3 +398,335 @@ paths:
           description: Acceso denegado.
         '500':
           description: Error interno del servidor.
+  api/admin/driver/add:
+    post:
+      tags:
+        - Drivers
+      summary: Crear un nuevo conductor
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                last_name:
+                  type: string
+                document:
+                  type: string
+                no_licencia:
+                  type: string
+                no_fast_driver:
+                  type: string
+              required:
+                - name
+                - last_name
+                - document
+                - no_licencia
+                - no_fast_driver
+      responses:
+        '201':
+          description: Conductor creado exitosamente
+        '400':
+          description: Datos inválidos
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+  
+  api/admin/driver:
+    get:
+      tags:
+        - Drivers
+      summary: Obtener todos los conductores
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de conductores
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+
+  api/admin/driver/{id}:
+    get:
+      tags:
+        - Drivers
+      summary: Obtener un conductor por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Datos del conductor
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+
+    delete:
+      tags:
+        - Drivers
+      summary: Eliminar un conductor por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Conductor eliminado correctamente
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+
+    put:
+      tags:
+        - Drivers
+      summary: Modificar un conductor por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                last_name:
+                  type: string
+                document:
+                  type: string
+                no_licencia:
+                  type: string
+                no_fast_driver:
+                  type: string
+              required:
+                - name
+                - last_name
+                - document
+                - no_licencia
+                - no_fast_driver
+      responses:
+        '200':
+          description: Conductor actualizado correctamente
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+
+  api/admin/ips/add:
+    post:
+      tags:
+        - IPS
+      summary: Crear una nueva IPS
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpsInput'
+      responses:
+        '201':
+          description: IPS creada exitosamente
+        '500':
+          description: Error del servidor
+
+  api/admin/ips:
+    get:
+      tags:
+        - IPS
+      summary: Obtener todas las IPS registradas
+      responses:
+        '200':
+          description: Lista de IPS
+        '500':
+          description: Error del servidor
+
+  api/admin/ips/{id}:
+    get:
+      tags:
+        - IPS
+      summary: Obtener una IPS por su ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Datos de la IPS
+        '404':
+          description: IPS no encontrada
+        '500':
+          description: Error del servidor
+
+    delete:
+      tags:
+        - IPS
+      summary: Eliminar una IPS por su ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: IPS eliminada exitosamente
+        '500':
+          description: Error del servidor
+
+    put:
+      tags:
+        - IPS
+      summary: Actualizar una IPS por su ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpsInput'
+      responses:
+        '200':
+          description: IPS actualizada exitosamente
+        '500':
+          description: Error del servidor
+
+  api/admin/shift/add:
+    post:
+      tags:
+        - Shifts
+      summary: Crear un nuevo turno
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShiftInput'
+      responses:
+        '201':
+          description: Turno creado exitosamente
+        '400':
+          description: Datos inválidos
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+  api/admin/ahift:
+    get:
+      tags:
+        - Shifts
+      summary: Obtener todos los turnos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de turnos
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+
+  api/admin/shift/{id}:
+    get:
+      tags:
+        - Shifts
+      summary: Obtener un turno por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Turno encontrado
+        '403':
+          description: Acceso denegado
+        '404':
+          description: Turno no encontrado
+        '500':
+          description: Error del servidor
+
+    delete:
+      tags:
+        - Shifts
+      summary: Eliminar un turno por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Turno eliminado exitosamente
+        '403':
+          description: Acceso denegado
+        '404':
+          description: Turno no encontrado
+        '500':
+          description: Error del servidor
+
+    put:
+      tags:
+        - Shifts
+      summary: Modificar un turno por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShiftInput'
+      responses:
+        '200':
+          description: Turno actualizado exitosamente
+        '403':
+          description: Acceso denegado
+        '500':
+          description: Error del servidor
+
