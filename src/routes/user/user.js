@@ -19,6 +19,9 @@ const {
 const {
   createService,
   getService,
+  getServiceById,
+  deleteService,
+  updateService,
 } = require("../../controllers/user/controllers/attetionController");
 
 router.use(authenticateToken);
@@ -37,9 +40,9 @@ router.put("/patient/:id", modificPatient);
 
 router.post("/attention/add", createService);
 router.get("/attention", getService);
-/*router.get("/service/:id", getServiceById);
+router.get("/service/:id", getServiceById);
 router.delete("/service/:id", deleteService);
 
-router.put("/service/:id", modificService);*/
+router.put("/service/:id", updateService);
 
 module.exports = router;

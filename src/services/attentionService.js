@@ -58,7 +58,7 @@ const getServiceById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-const deleteService = async (req, res) => {
+const deleteServiceService = async (req, res) => {
   const { id } = req.params;
   try {
     const service = await prisma.service.delete({
@@ -89,6 +89,6 @@ module.exports = {
   createAttentionService,
   getAttentionService,
   getServiceById,
-  deleteService,
+  deleteServiceService,
   modificService,
 };
