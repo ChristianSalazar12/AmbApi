@@ -29,6 +29,27 @@ Descripciones: Información contextual del incidente o atención.
 Servicios (Atenciones): Registro completo del evento médico, incluyendo lugar, tiempos y estado.
 
                                       📦 3. Tech Stack | Tecnologías Utilizadas
+### Tech Stack / Stack Tecnológico
+
+<p align="left">
+  <!-- Node.js -->
+  <img src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white" alt="Node.js" width="40" height="40" />
+  
+  <!-- Express.js -->
+  <img src="https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=white" alt="Express.js" width="40" height="40" />
+
+  <!-- PostgreSQL -->
+  <img src="https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white" alt="PostgreSQL" width="40" height="40" />
+
+  <!-- Swagger -->
+  <img src="https://img.shields.io/badge/Swagger-85EA2D?logo=swagger&logoColor=white" alt="Swagger" width="40" height="40" />
+  
+  <!-- JWT -->
+  <img src="https://img.shields.io/badge/JWT-black?logo=json-web-tokens&logoColor=white" alt="JWT" width="40" height="40" />
+
+  <!-- Postman -->
+  <img src="https://img.shields.io/badge/Postman-FF6C37?logo=postman&logoColor=white" alt="Postman" width="40" height="40" />
+</p>
 
  Node.js (Backend)
 
@@ -42,4 +63,4 @@ Swagger (OpenAPI) para documentación interactiva
 
 Postman para pruebas de endpoints
 
-<img width="30px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" /> javasCript 
+ javasCript 
