@@ -1,27 +1,45 @@
-Documentación del Proyecto AmbuAPI
+                                             📄 AmbuAPI Project Documentation
 
-1. Descripción del Proyecto
-AmbuAPI es una API desarrollada en Node.js utilizando Express.js con el objetivo de gestionar la información relacionada con ambulancias y servicios de emergencia. Proporciona endpoints para administrar datos de vehículos, personal, rutas y servicios en tiempo real, facilitando la gestión eficiente de emergencias.
+                                    📝 1. Project Description | Descripción del Proyecto
 
-2. Relación con la Base de Datos
-La API se conecta a una base de datos donde se almacenan los datos esenciales del sistema. La estructura de la base de datos incluye las siguientes entidades principales:
+AmbuAPI is a RESTful API developed in Node.js using the Express.js framework. Its main goal is to manage emergency medical services, including real-time coordination of ambulances, medical staff, service requests, and incident records. It is designed for high reliability and data consistency in emergency operations.
 
-Ambulancias: Registra información sobre cada unidad, como número de identificación, tipo de vehículo, disponibilidad y ubicación.
+AmbuAPI es una API RESTful desarrollada en Node.js utilizando el framework Express.js. Su principal objetivo es gestionar servicios médicos de emergencia, incluyendo la coordinación en tiempo real de ambulancias, personal médico, solicitudes de atención y registros de incidentes. Está diseñada para garantizar alta confiabilidad y consistencia de datos en operaciones de emergencia.
 
-Personal Médico: Contiene datos de paramédicos y conductores, incluyendo credenciales y horarios.
+                                    🧩 2. Database Relationship | Relación con la Base de Datos
 
-Servicios: Almacena registros de atenciones médicas realizadas, con detalles sobre ubicación, tiempo de respuesta y estado del servicio.
+La estructura actual incluye las siguientes entidades principales:
 
-Usuarios: Gestiona la información de quienes solicitan el servicio, con datos básicos de contacto y ubicación.
+IPS: Instituciones Prestadoras de Salud registradas.
 
-3. Explicación de los Primeros Endpoints
+Ambulancias: Vehículos disponibles con tipo, estado, y ubicación.
 
-Endpoint para listar ambulancias: Permite obtener un listado de todas las ambulancias registradas, mostrando su estado y ubicación actual.
+Personal Médico:
 
-Endpoint para registrar una nueva ambulancia: Recibe los datos de una unidad nueva y la almacena en la base de datos.
+paramédicos
+conductores
+auxiliares
 
-Endpoint para actualizar el estado de una ambulancia: Se utiliza para cambiar la disponibilidad de una ambulancia en función de su estado operativo.
+Turnos (Shifts): Registro de asignaciones de personal y ambulancias por jornada.
 
-Endpoint para obtener detalles de un servicio específico: Recupera la información de un servicio de emergencia en particular, incluyendo detalles del personal involucrado y tiempos de respuesta.
+Pacientes: Datos personales y documento de identidad.
 
-Este documento proporciona una visión general del proyecto y su estructura. A medida que se agreguen nuevas funcionalidades, se ampliará la documentación correspondiente.
+Descripciones: Información contextual del incidente o atención.
+
+Servicios (Atenciones): Registro completo del evento médico, incluyendo lugar, tiempos y estado.
+
+                                      📦 3. Tech Stack | Tecnologías Utilizadas
+
+ Node.js (Backend)
+
+ Express.js (API Routing)
+
+Sequelize ORM (con PostgreSQL)
+
+JWT (Autenticación)
+
+Swagger (OpenAPI) para documentación interactiva
+
+Postman para pruebas de endpoints
+
+<img width="30px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" /> javasCript 
