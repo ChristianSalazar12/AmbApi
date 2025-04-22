@@ -13,6 +13,214 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:
+    ParamedicInput:
+      type: object
+      required:
+        - name
+        - last_name
+        - document
+        - tipo_medic
+        - no_ci_medic
+        - id_capacitation
+        - password
+        - role
+      properties:
+        name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        document:
+          type: string
+          example: "1234567890"
+        tipo_medic:
+          type: string
+          example: "General"
+        no_ci_medic:
+          type: string
+          example: "CI-123456"
+        id_capacitation:
+          type: string
+          example: "CAP-123456"
+        password:
+          type: string
+          example: "SecurePass123"
+        role:
+          type: string
+          enum: [ADMIN, USER]
+          example: "USER"
+
+    AssistantInput:
+      type: object
+      required:
+        - name
+        - last_name
+        - document
+        - no_ci_auxiliar
+        - no_ci_soporte_vital
+        - password
+        - role
+      properties:
+        name:
+          type: string
+          example: Maria
+        last_name:
+          type: string
+          example: García
+        document:
+          type: string
+          example: "987654321"
+        no_ci_auxiliar:
+          type: string
+          example: "AUX-54321"
+        no_ci_soporte_vital:
+          type: string
+          example: "SV-99999"
+        password:
+          type: string
+          example: "Pass1234!"
+        role:
+          type: string
+          enum: [ADMIN, USER]
+          example: "USER"
+    IpsInput:
+      type: object
+      required:
+        - nombre
+        - direccion
+      properties:
+        nombre:
+          type: string
+          example: Curayaa
+        direccion:
+          type: string
+          example: cr4-11r
+
+    ShiftInput:
+      type: object
+      required:
+        - time_start
+        - time_end
+        - paramedicId
+        - auxiliarId
+        - conductorId
+        - ambulanciaId
+      properties:
+        time_start:
+          type: string
+          format: date-time
+          example: "2025-04-07T08:00:00Z"
+        time_end:
+          type: string
+          format: date-time
+          example: "2025-04-07T16:00:00Z"
+        paramedicId:
+          type: integer
+          example: 1
+        auxiliarId:
+          type: integer
+          example: 1
+        conductorId:
+          type: integer
+          example: 1
+        ambulanciaId:
+          type: integer
+          example: 2
+
+    ServiceInput:
+      type: object
+      required:
+        - date
+        - status
+        - time_arrived
+        - time_finish
+        - code_start
+        - code_end
+        - place_accident
+        - nro_informe
+        - id_turno
+        - id_paciente
+        - id_descripcion
+      properties:
+        date:
+          type: string
+          format: date-time
+          example: "2025-04-17T10:00:00Z"
+        status:
+          type: string
+          enum: [PENDIENTE, COMPLETADO, CANCELADO]
+          example: "PENDIENTE"
+        time_arrived:
+          type: string
+          format: date-time
+          example: "2025-04-17T10:10:00Z"
+        time_finish:
+          type: string
+          format: date-time
+          example: "2025-04-17T11:00:00Z"
+        code_start:
+          type: string
+          example: "CS-124"
+        code_end:
+          type: string
+          example: "CE-455"
+        place_accident:
+          type: string
+          example: "Avenida Central"
+        nro_informe:
+          type: string
+          example: "INF-98768"
+        id_turno:
+          type: integer
+          example: 1
+        id_paciente:
+          type: integer
+          example: 1
+        id_descripcion:
+          type: integer
+          example: 1
+
+    DescriptionInput:
+      type: object
+      required:
+        - description
+        - type_context
+        - implicados
+      properties:
+        description:
+          type: string
+          example: "Paciente con trauma craneoencefálico venta"
+        type_context:
+          type: string
+          enum: [CLINICO, TRAUMA, OTRO]
+          example: "CLINICO"
+        implicados:
+          type: string
+          example: "Paramédico, Paciente, Familiares"
+
+    PatientInput:
+      type: object
+      required:
+        - name
+        - last_name
+        - document
+        - entidad_salud
+      properties:
+        name:
+          type: string
+          example: "Claudio"
+        last_name:
+          type: string
+          example: "Rosero"
+        document:
+          type: string
+          example: "1232421327"
+        entidad_salud:
+          type: string
+          example: "emssanar"
+
 security:
   - bearerAuth: []
 
@@ -23,7 +231,7 @@ tags:
     description: "Operaciones de paramédicos"
   - name: "assistants"
     description: "Operaciones de asistentes"
-  - name: "ambulance"
+  - name: "Ambulances"
     description: "Operaciones de ambulancias"
   - name: "Drivers"
     description: "Operaciones de conductores"
@@ -37,11 +245,6 @@ tags:
     description: "Operaciones de Descripciones"
   - name: "Patients"
     description: "Operaciones de Pacientes"
-  - name: "user"
-    description: "Operaciones del usuario"
- 
-  - name: "Patient"
-    description: "Operaciones de pacientes"
 
 paths:
   /api/auth/login:
@@ -81,11 +284,14 @@ paths:
         500:
           description: "Error interno del servidor"
 
-  /api/admin/paramedic:
+  /api/admin/paramedic/add:
     post:
       tags:
         - paramedics
       summary: Crear un nuevo paramédico
+      description: Crea un nuevo paramédico. Solo accesible por usuarios con rol ADMIN.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -101,6 +307,7 @@ paths:
           description: Access Denied
         "500":
           description: Internal server error
+
   /api/admin/paramedic:
     get:
       tags:
@@ -114,7 +321,7 @@ paths:
         "500":
           description: Internal server error
 
-  /admin/paramedic/{id}:
+  /api/admin/paramedic/{id}:
     get:
       tags:
         - paramedics
@@ -178,6 +385,9 @@ paths:
       tags:
         - assistants
       summary: Crear un nuevo asistente
+      description: Crea un nuevo asistente. Solo accesible por usuarios con rol ADMIN.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -207,7 +417,7 @@ paths:
         "500":
           description: Internal server error
 
-  /api/admin/assistants/{id}:
+  /api/admin/assistant/{id}:
     get:
       tags:
         - assistants
@@ -294,13 +504,13 @@ paths:
                   type: integer
                   example: 1
       responses:
-        '201':
+        "201":
           description: Ambulancia creada exitosamente.
-        '400':
+        "400":
           description: Error de validación.
-        '403':
+        "403":
           description: Acceso denegado.
-        '500':
+        "500":
           description: Error interno del servidor.
 
   /api/admin/ambulance:
@@ -312,14 +522,14 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Lista de ambulancias.
-        '403':
+        "403":
           description: Acceso denegado.
-        '500':
+        "500":
           description: Error interno del servidor.
 
-  api/admin/ambulance/{id}:
+  /api/admin/ambulance/{id}:
     get:
       tags:
         - Ambulances
@@ -334,11 +544,11 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Ambulancia encontrada.
-        '403':
+        "403":
           description: Acceso denegado.
-        '500':
+        "500":
           description: Error interno del servidor.
 
     delete:
@@ -355,11 +565,11 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        "204":
           description: Ambulancia eliminada exitosamente.
-        '403':
+        "403":
           description: Acceso denegado.
-        '500':
+        "500":
           description: Error interno del servidor.
 
     put:
@@ -395,13 +605,13 @@ paths:
                   type: integer
                   example: 2
       responses:
-        '200':
+        "200":
           description: Ambulancia actualizada correctamente.
-        '400':
+        "400":
           description: Error de validación.
-        '403':
+        "403":
           description: Acceso denegado.
-        '500':
+        "500":
           description: Error interno del servidor.
   /api/admin/driver/add:
     post:
@@ -419,14 +629,19 @@ paths:
               properties:
                 name:
                   type: string
+                  example: "Carlos"
                 last_name:
                   type: string
+                  example: "Lopez"
                 document:
                   type: string
+                  example: "9876543210"
                 no_licencia:
                   type: string
+                  example: "LIC-123456"
                 no_fast_driver:
                   type: string
+                  example: "FD-654321"
               required:
                 - name
                 - last_name
@@ -434,15 +649,15 @@ paths:
                 - no_licencia
                 - no_fast_driver
       responses:
-        '201':
+        "201":
           description: Conductor creado exitosamente
-        '400':
+        "400":
           description: Datos inválidos
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
-  
+
   /api/admin/driver:
     get:
       tags:
@@ -451,11 +666,11 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Lista de conductores
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
 
   /api/admin/driver/{id}:
@@ -472,11 +687,11 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Datos del conductor
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
 
     delete:
@@ -492,11 +707,11 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        "204":
           description: Conductor eliminado correctamente
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
 
     put:
@@ -535,11 +750,11 @@ paths:
                 - no_licencia
                 - no_fast_driver
       responses:
-        '200':
+        "200":
           description: Conductor actualizado correctamente
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
 
   /api/admin/ips/add:
@@ -547,16 +762,19 @@ paths:
       tags:
         - IPS
       summary: Crear una nueva IPS
+      description: Crea una nueva IPS. Solo accesible por usuarios con rol ADMIN.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IpsInput'
+              $ref: "#/components/schemas/IpsInput"
       responses:
-        '201':
+        "201":
           description: IPS creada exitosamente
-        '500':
+        "500":
           description: Error del servidor
 
   /api/admin/ips:
@@ -565,9 +783,9 @@ paths:
         - IPS
       summary: Obtener todas las IPS registradas
       responses:
-        '200':
+        "200":
           description: Lista de IPS
-        '500':
+        "500":
           description: Error del servidor
 
   /api/admin/ips/{id}:
@@ -582,11 +800,11 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Datos de la IPS
-        '404':
+        "404":
           description: IPS no encontrada
-        '500':
+        "500":
           description: Error del servidor
 
     delete:
@@ -600,9 +818,9 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: IPS eliminada exitosamente
-        '500':
+        "500":
           description: Error del servidor
 
     put:
@@ -620,11 +838,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IpsInput'
+              $ref: "#/components/schemas/IpsInput"
       responses:
-        '200':
+        "200":
           description: IPS actualizada exitosamente
-        '500':
+        "500":
           description: Error del servidor
 
   /api/admin/shift/add:
@@ -632,6 +850,7 @@ paths:
       tags:
         - Shifts
       summary: Crear un nuevo turno
+      description: Crea un nuevo turno. Solo accesible por usuarios con rol ADMIN.
       security:
         - bearerAuth: []
       requestBody:
@@ -639,17 +858,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ShiftInput'
+              $ref: "#/components/schemas/ShiftInput"
       responses:
-        '201':
+        "201":
           description: Turno creado exitosamente
-        '400':
+        "400":
           description: Datos inválidos
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
-  /api/admin/ahift:
+
+  /api/admin/shift:
     get:
       tags:
         - Shifts
@@ -657,11 +877,11 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Lista de turnos
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
 
   /api/admin/shift/{id}:
@@ -678,13 +898,13 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Turno encontrado
-        '403':
+        "403":
           description: Acceso denegado
-        '404':
+        "404":
           description: Turno no encontrado
-        '500':
+        "500":
           description: Error del servidor
 
     delete:
@@ -700,13 +920,13 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        "204":
           description: Turno eliminado exitosamente
-        '403':
+        "403":
           description: Acceso denegado
-        '404':
+        "404":
           description: Turno no encontrado
-        '500':
+        "500":
           description: Error del servidor
 
     put:
@@ -726,13 +946,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ShiftInput'
+              $ref: "#/components/schemas/ShiftInput"
       responses:
-        '200':
+        "200":
           description: Turno actualizado exitosamente
-        '403':
+        "403":
           description: Acceso denegado
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/attention/add:
@@ -740,18 +960,21 @@ paths:
       tags:
         - Services
       summary: Crear un nuevo servicio de atención
+      description: Crea un nuevo servicio de atención. Solo accesible por usuarios con rol USER.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ServiceInput'
+              $ref: "#/components/schemas/ServiceInput"
       responses:
-        '201':
+        "201":
           description: Servicio creado exitosamente
-        '400':
+        "400":
           description: Error de validación
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/attention:
@@ -760,9 +983,9 @@ paths:
         - Services
       summary: Obtener todos los servicios de atención
       responses:
-        '200':
+        "200":
           description: Lista de servicios
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/attention/{id}:
@@ -777,11 +1000,11 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Servicio encontrado
-        '404':
+        "404":
           description: Servicio no encontrado
-        '500':
+        "500":
           description: Error del servidor
 
     put:
@@ -799,11 +1022,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ServiceInput'
+              $ref: "#/components/schemas/ServiceInput"
       responses:
-        '200':
+        "200":
           description: Servicio actualizado exitosamente
-        '500':
+        "500":
           description: Error del servidor
 
     delete:
@@ -817,9 +1040,9 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Servicio eliminado exitosamente
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/description/add:
@@ -827,28 +1050,30 @@ paths:
       tags:
         - Descriptions
       summary: Crear una nueva descripción de incidente
+      description: Crea una nueva descripción de incidente. Solo accesible por usuarios con rol USER.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DescriptionInput'
+              $ref: "#/components/schemas/DescriptionInput"
       responses:
-        '201':
+        "201":
           description: Descripción creada exitosamente
-        '400':
+        "400":
           description: Error de validación
-        '500':
+        "500":
           description: Error del servidor
+
   /api/user/description:
     get:
       tags:
         - Descriptions
       summary: Obtener todas las descripciones
       responses:
-        '200':
+        "200":
           description: Lista de descripciones
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/description/{id}:
@@ -863,11 +1088,11 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Descripción encontrada
-        '404':
+        "404":
           description: Descripción no encontrada
-        '500':
+        "500":
           description: Error del servidor
 
     put:
@@ -892,9 +1117,9 @@ paths:
               required:
                 - description
       responses:
-        '200':
+        "200":
           description: Descripción actualizada
-        '500':
+        "500":
           description: Error del servidor
 
     delete:
@@ -908,9 +1133,9 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        "204":
           description: Descripción eliminada
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/patient/add:
@@ -918,18 +1143,19 @@ paths:
       tags:
         - Patients
       summary: Crear un nuevo paciente
+      description: Crea un nuevo paciente. Solo accesible por usuarios con rol USER.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatientInput'
+              $ref: "#/components/schemas/PatientInput"
       responses:
-        '201':
+        "201":
           description: Paciente creado exitosamente
-        '400':
+        "400":
           description: Error de validación o fallo al crear
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/patient:
@@ -938,9 +1164,9 @@ paths:
         - Patients
       summary: Obtener todos los pacientes
       responses:
-        '200':
+        "200":
           description: Lista de pacientes
-        '500':
+        "500":
           description: Error del servidor
 
   /api/user/patient/{id}:
@@ -955,9 +1181,9 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Paciente encontrado
-        '500':
+        "500":
           description: Error del servidor
 
     put:
@@ -975,11 +1201,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatientInput'
+              $ref: "#/components/schemas/PatientInput"
       responses:
-        '200':
+        "200":
           description: Paciente actualizado
-        '500':
+        "500":
           description: Error del servidor
 
     delete:
@@ -993,8 +1219,7 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        "204":
           description: Paciente eliminado exitosamente
-        '500':
+        "500":
           description: Error del servidor
-
