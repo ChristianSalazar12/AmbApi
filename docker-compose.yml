@@ -13,6 +13,23 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/ambuapi
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: admin
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
   api:
     build: .
     depends_on:
@@ -26,6 +43,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - ./keycloak.json:/app/keycloak.json
     command: "npm start"
 
 volumes:

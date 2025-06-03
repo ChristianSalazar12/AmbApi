@@ -4,8 +4,7 @@ const {
   loginController,
   getUsers,
 } = require("../controllers/user/authController");
-const authenticateToken = require("../middlewares/auth");
-const { route } = require("../app");
+// const authenticateToken = require("../middlewares/auth");
 
 const router = Router();
 

@@ -11,7 +11,7 @@ const {
   deleteAssistant,
   modificAssistant,
 } = require("../../controllers/admin/adminController");
-const authenticateToken = require("../../middlewares/auth");
+// const authenticateToken = require("../../middlewares/auth");
 const {
   createDriver,
   getDriver,

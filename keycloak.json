@@ -1,0 +1,10 @@
+{
+  "realm": "ambu-realm",
+  "auth-server-url": "http://keycloak:8080/",
+  "ssl-required": "external",
+  "resource": "ambu-backend",
+  "credentials": {
+    "secret": "Wfz281VT2ivrBPym7iPt2dDA5DUJNp2d"
+  },
+  "confidential-port": 0
+}
