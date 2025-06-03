@@ -41,7 +41,7 @@ const {
   getIpsById,
 } = require("../../controllers/admin/controllers/ipsController");
 const router = Router();
-router.use(authenticateToken);
+// router.use(authenticateToken);
 
 router.post("/paramedic/add", createParamedic);
 router.get("/paramedic", getParamedic);

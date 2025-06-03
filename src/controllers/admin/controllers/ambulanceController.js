@@ -9,9 +9,9 @@ const ambulanceValidation = require("../../../utils/ambulanceValidation");
 const Prisma = new PrismaClient();
 
 const createAmbulance = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
 
   const data = req.body;
   const validation = await ambulanceValidation(data, Prisma);
@@ -32,9 +32,9 @@ const createAmbulance = async (req, res) => {
 };
 
 const getAmbulance = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
   try {
     const ambulances = await getAmbulanceService();
     return res.status(200).json(ambulances);
