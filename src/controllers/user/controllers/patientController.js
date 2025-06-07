@@ -4,6 +4,7 @@ const {
   createPatientService,
   getPatientByIdService,
   deletePatientService,
+  modificPatientService,
 } = require("../../../services/patientService");
 const { validatePatient } = require("../../../utils/patientValidation");
 
@@ -57,10 +58,13 @@ const modificPatient = async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
-    const updatedPatient = await Prisma.patient.update({
-      where: { id: Number(id) },
-      data,
-    });
+    const updatedPatient = await modificPatientService(id, data);
+    if (!updatedPatient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ error: "No data provided for update" });
+    }
     return res.status(200).json(updatedPatient);
   } catch (error) {
     return res.status(500).json({ error: error.message });

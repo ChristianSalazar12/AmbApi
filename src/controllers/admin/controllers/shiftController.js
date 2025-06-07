@@ -3,6 +3,7 @@ const {
   getShiftService,
   createShiftService,
   getShiftByIdService,
+  getCurrentShiftService,
   deleteShiftService,
   modificShiftService,
 } = require("../../../services/shiftService");
@@ -59,6 +60,21 @@ const getShiftById = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+// hacer controller para conosumir el metodo para obtener los turnos actuales
+const getCurrentShift = async (req, res) => {
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
+  try {
+    const currentShift = await getCurrentShiftService();
+    if (!currentShift) {
+      return res.status(404).json({ error: "No current shift found" });
+    }
+    return res.status(200).json(currentShift);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 const deleteShift = async (req, res) => {
   //if (req.user.role !== "ADMIN") {
   //  return res.status(403).json({ error: "Access Denied" });
@@ -100,6 +116,7 @@ module.exports = {
   createShift,
   getShift,
   getShiftById,
+  getCurrentShift,
   deleteShift,
   modificShift,
 };

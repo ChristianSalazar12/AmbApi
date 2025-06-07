@@ -1,10 +1,16 @@
 const { PrismaClient } = require("@prisma/client");
 const Prisma = new PrismaClient();
 
-const createPatientService = async (data, Prisma) => {
+const createPatientService = async (body, Prisma) => {
   try {
+
     const newPatient = await Prisma.pacientes.create({
-      data,
+      data: {
+        name: body.name,
+        last_name: body.last_name,
+        document: body.document,
+        entidad_salud: body.entidad_salud,
+      }
     });
     return newPatient;
   } catch (error) {
@@ -25,6 +31,14 @@ const getPatientByIdService = async (id) => {
   });
   return patient;
 };
+
+const modificPatientService = async (id, data) => {
+  const updatedPatient = await Prisma.pacientes.update({
+    where: { id: parseInt(id) },
+    data,
+  });
+  return updatedPatient;
+};
 const deletePatientService = async (id) => {
   const deletedPatient = await Prisma.pacientes.delete({
     where: { id: parseInt(id) },
@@ -37,4 +51,5 @@ module.exports = {
   getPatientService,
   getPatientByIdService,
   deletePatientService,
+  modificPatientService
 };

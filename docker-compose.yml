@@ -40,10 +40,17 @@ services:
       PORT: 3000
       JWT_SECRET: Ambulancia
     volumes:
-      - .:/app
-      - /app/node_modules
+      # Monta solo el código fuente, no node_modules xs
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
       - ./keycloak.json:/app/keycloak.json
-    command: "npm run dev"
+      # Usa un volumen nombrado para node_modules
+      - node_modules:/app/node_modules
+    # En la sección api, cambia:
+    command: sh -c "npm install && npx prisma generate && npx prisma db push && npx prisma db seed && npm run dev"
 
 volumes:
   db_data:
+  node_modules:
