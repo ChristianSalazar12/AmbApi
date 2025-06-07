@@ -11,7 +11,7 @@ const swaggerDocument = YAML.load("./swagger.yaml");
 const cors = require("cors");
 const { keycloak, sessionMiddleware } = require("./middlewares/keycloak");
 const router = require("./routes");
-const { logins } = require("./controllers/user/authController");
+const { handleLogin } = require("./controllers/user/authController");
 
 app.use(cors());
 app.use(express.json());
@@ -23,7 +23,7 @@ app.use(sessionMiddleware);
 app.use(keycloak.middleware());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use("/login", logins);
+app.post("/login", handleLogin);
 app.use("/api", router);
 
 app.get("/inicio", (req, res) => {

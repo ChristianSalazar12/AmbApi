@@ -5,7 +5,7 @@ const REALM = "ambu-realm";
 const CLIENT_ID = "ambu-backend"; // debe ser "confidential" y tener secret
 const CLIENT_SECRET = "Wfz281VT2ivrBPym7iPt2dDA5DUJNp2d"; // pon aquí tu client secret real
 
-async function login(document, password) {
+async function logins(document, password) {
   try {
     const response = await axios.post(
       `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/token`,
@@ -30,5 +30,5 @@ async function login(document, password) {
 }
 
 module.exports = {
-  login,
+  logins,
 };
