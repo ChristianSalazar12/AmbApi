@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const authenticateToken = require("../../middlewares/auth");
+// const authenticateToken = require("../../middlewares/auth");
 const {
   createDescription,
   getDescription,
@@ -24,7 +24,7 @@ const {
   updateService,
 } = require("../../controllers/user/controllers/attetionController");
 
-router.use(authenticateToken);
+// router.use(authenticateToken);
 
 router.post("/description/add", createDescription);
 router.get("/description", getDescription);

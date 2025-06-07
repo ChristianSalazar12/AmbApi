@@ -247,7 +247,7 @@ tags:
     description: "Operaciones de Pacientes"
 
 paths:
-  /api/auth/login:
+  /login:
     post:
       tags:
         - auth
@@ -260,15 +260,15 @@ paths:
             schema:
               type: object
               required:
-                - document
+                - username
                 - password
               properties:
-                document:
+                username:
                   type: string
-                  example: "1234123412"
+                  example: "admin"
                 password:
                   type: string
-                  example: "a123456789"
+                  example: "admin"
       responses:
         200:
           description: "Inicio de sesión exitoso"

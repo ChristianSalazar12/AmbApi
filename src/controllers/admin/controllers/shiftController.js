@@ -10,9 +10,9 @@ const { validateShift } = require("../../../utils/shifts.validation");
 const Prisma = new PrismaClient();
 
 const createShift = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const data = req.body;
   const validation = await validateShift(data, Prisma);
   if (!validation.isValid) {
@@ -34,9 +34,9 @@ const createShift = async (req, res) => {
   }
 };
 const getShift = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   try {
     const shifts = await getShiftService();
     return res.status(200).json(shifts);
@@ -45,9 +45,9 @@ const getShift = async (req, res) => {
   }
 };
 const getShiftById = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   try {
     const shift = await getShiftByIdService(id);
@@ -60,9 +60,9 @@ const getShiftById = async (req, res) => {
   }
 };
 const deleteShift = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   try {
     const shift = await deleteShiftService(id);
@@ -76,9 +76,9 @@ const deleteShift = async (req, res) => {
 };
 //it not add yet, but it will be added in the future
 const modificShift = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   const data = req.body;
   try {

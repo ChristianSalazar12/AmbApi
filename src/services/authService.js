@@ -1,64 +1,34 @@
-const { PrismaClient } = require("@prisma/client");
-const jwt = require("jsonwebtoken");
-const prisma = new PrismaClient();
-const bcrypt = require("bcryptjs");
+const axios = require("axios");
 
-const register = async (
-  name,
-  last_name,
-  document,
-  tipo_medic,
-  no_ci_medic,
-  id_capacitation,
-  password
-) => {
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await prisma.paramedico.create({
-    data: {
-      name,
-      last_name,
-      document,
-      tipo_medic,
-      no_ci_medic,
-      id_capacitation,
-      password: hashedPassword,
-      role: "USER",
-    },
-  });
-  return newUser;
-};
-const login = async (document, password) => {
-  const user = await prisma.paramedico.findUnique({
-    where: { document },
-  });
+const KEYCLOAK_URL = "http://localhost:8080";
+const REALM = "ambu-realm";
+const CLIENT_ID = "ambu-backend"; // debe ser "confidential" y tener secret
+const CLIENT_SECRET = "Wfz281VT2ivrBPym7iPt2dDA5DUJNp2d"; // pon aquí tu client secret real
 
-  if (!user) {
+async function login(document, password) {
+  try {
+    const response = await axios.post(
+      `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/token`,
+      new URLSearchParams({
+        grant_type: "password",
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        username: document,
+        password: password,
+      }),
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      }
+    );
+
+    // Devuelve el token completo
+    return response.data;
+  } catch (error) {
+    console.error("Login failed:", error.response?.data || error.message);
     throw new Error("Invalid credentials");
   }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    throw new Error("Invalid credentials here");
-  }
-
-  const token = jwt.sign(
-    { id: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "2h",
-    }
-  );
-
-  return token;
-};
-
-const getAllUsers = async () => {
-  const users = await prisma.paramedico.findMany();
-  return users;
-};
+}
 
 module.exports = {
-  register,
   login,
-  getAllUsers,
 };

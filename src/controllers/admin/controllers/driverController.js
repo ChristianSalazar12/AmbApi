@@ -11,9 +11,9 @@ const {
 const { validateConductor } = require("../../../utils/driverValidation");
 
 const createDriver = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
   const data = req.body;
   const validation = await validateConductor(data, Prisma);
   if (!validation.isValid) {
@@ -34,9 +34,9 @@ const createDriver = async (req, res) => {
 };
 
 const getDriver = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
   try {
     const drivers = await getDriverService();
     return res.status(200).json(drivers);
@@ -45,9 +45,9 @@ const getDriver = async (req, res) => {
   }
 };
 const getDriverById = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
   const { id } = req.params;
   try {
     const driver = await getDriverByIdService(id);
@@ -57,9 +57,9 @@ const getDriverById = async (req, res) => {
   }
 };
 const deleteDriver = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   try {
     await deleteDriverService(id);
@@ -69,9 +69,9 @@ const deleteDriver = async (req, res) => {
   }
 };
 const modificDriver = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   const { name, last_name, document, no_licencia, no_fast_driver } = req.body;
   try {

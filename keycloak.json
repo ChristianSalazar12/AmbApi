@@ -3,6 +3,8 @@
   "auth-server-url": "http://keycloak:8080/",
   "ssl-required": "external",
   "resource": "ambu-backend",
+  "public-client": false,
+  "bearer-only": true,
   "credentials": {
     "secret": "Wfz281VT2ivrBPym7iPt2dDA5DUJNp2d"
   },

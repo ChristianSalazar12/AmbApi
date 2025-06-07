@@ -43,9 +43,9 @@ const getAmbulance = async (req, res) => {
   }
 };
 const getAmbulanceById = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
   const { id } = req.params;
   try {
     const ambulance = await getAmbulanceByIdService(id);
@@ -56,9 +56,9 @@ const getAmbulanceById = async (req, res) => {
   }
 };
 const deleteAmbulance = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
   const { id } = req.params;
   try {
     const ambulance = await deleteAmbulanceService(id);
@@ -68,9 +68,9 @@ const deleteAmbulance = async (req, res) => {
   }
 };
 const modificAmbulance = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
   const { id } = req.params;
   const data = req.body;
   const validation = await ambulanceValidation(data, Prisma);

@@ -17,9 +17,9 @@ const { validateParamedico } = require("../../utils/paramedicsValidation");
 const { validateAuxiliar } = require("../../utils/auxiliarValidation");
 
 const createParamedic = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const data = req.body;
   const validation = await validateParamedico(data, Prisma);
   if (!validation.isValid) {
@@ -42,11 +42,11 @@ const createParamedic = async (req, res) => {
   }
 };
 const getParamedic = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    console.log("User role:", req.user.role); //
-    //👈
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  // if (req.user.role !== "ADMIN") {
+  //   console.log("User role:", req.user.role); //
+  //   //👈
+  //   return res.status(403).json({ error: "Access Denied" });
+  // }
 
   try {
     const paramedics = await getParamedicService();
@@ -56,9 +56,9 @@ const getParamedic = async (req, res) => {
   }
 };
 const getParamedicById = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   try {
     const paramedic = await getParamedicByIdService(id);
@@ -68,9 +68,9 @@ const getParamedicById = async (req, res) => {
   }
 };
 const deleteParamedic = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   try {
     await deleteParamedicService(id);
@@ -80,9 +80,9 @@ const deleteParamedic = async (req, res) => {
   }
 };
 const modificParamedic = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   const {
     name,
@@ -107,9 +107,9 @@ const modificParamedic = async (req, res) => {
   }
 };
 const createAssistant = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const data = req.body;
   const validation = await validateAuxiliar(data, Prisma);
   if (!validation.isValid) {
@@ -131,9 +131,9 @@ const createAssistant = async (req, res) => {
   }
 };
 const getAssistant = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   try {
     const assistants = await getAssistantService();
     return res.status(200).json(assistants);
@@ -142,9 +142,9 @@ const getAssistant = async (req, res) => {
   }
 };
 const getAssistantById = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   try {
     const assistant = await getAssistantByIdService(id);
@@ -154,9 +154,9 @@ const getAssistantById = async (req, res) => {
   }
 };
 const deleteAssistant = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   try {
     await deleteAssistantService(id);
@@ -166,9 +166,9 @@ const deleteAssistant = async (req, res) => {
   }
 };
 const modificAssistant = async (req, res) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access Denied" });
-  }
+  //if (req.user.role !== "ADMIN") {
+  //  return res.status(403).json({ error: "Access Denied" });
+  //}
   const { id } = req.params;
   const { name, last_name, document, no_ci_auxiliar, no_ci_soporte_vital } =
     req.body;
