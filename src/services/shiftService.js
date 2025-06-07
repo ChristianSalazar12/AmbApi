@@ -33,6 +33,24 @@ const getShiftByIdService = async (id) => {
   });
   return shift;
 };
+
+const getCurrentShiftService = async () => {
+  const now = new Date();
+  const currentShift = await prisma.turnos.findMany({
+    where: {
+      time_start: {
+        lte: now,
+      },
+      time_end: {
+        gt: now,
+      },
+    },
+    orderBy: {
+      time_start: "asc",
+    },
+  });
+  return currentShift;
+};
 const deleteShiftService = async (id) => {
   const shift = await prisma.turnos.delete({
     where: {
@@ -58,24 +76,6 @@ const modificShiftService = async (id, data) => {
   return updatedShift;
 };
 
-const getCurrentShiftService = async () => {
-  const now = new Date();
-  const currentShift = await prisma.turnos.findFirst({
-    where: {
-      time_start: {
-        lte: now,
-      },
-      time_end: {
-        gt: now,
-      },
-    },
-    orderBy: {
-      time_start: "asc",
-    },
-  });
-  return currentShift;
-};
-
 const getNextShiftService = async (fromTime) => {
   const nextShift = await prisma.turnos.findFirst({
     where: {
@@ -94,8 +94,8 @@ module.exports = {
   createShiftService,
   getShiftService,
   getShiftByIdService,
+  getCurrentShiftService,
   deleteShiftService,
   modificShiftService,
-  getCurrentShiftService,
   getNextShiftService,
 };

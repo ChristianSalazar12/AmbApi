@@ -907,6 +907,34 @@ paths:
         "500":
           description: Error del servidor
 
+  /api/admin/shift/currents:
+    get:
+      tags:
+        - Shifts
+      summary: Obtener los turnos actuales
+      description: Obtiene los turnos actuales. Solo accesible por usuarios con rol ADMIN.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Turnos encontrados
+        "403":
+          description: Acceso denegado
+        "404":
+          description: Turno no encontrado
+        "500":
+          description: Error del servidor
+
+      responses:
+        "200":
+          description: Turnos encontrados
+        "403":
+          description: Acceso denegado
+        "404":
+          description: Turno no encontrado
+        "500":
+          description: Error del servidor
+
     delete:
       tags:
         - Shifts

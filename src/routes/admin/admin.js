@@ -23,6 +23,7 @@ const {
   createShift,
   getShift,
   getShiftById,
+  getCurrentShift,
   deleteShift,
   modificShift,
 } = require("../../controllers/admin/controllers/shiftController");
@@ -65,6 +66,7 @@ admin.put("/assistant/:id", modificAssistant);
 
 admin.post("/shift/add", createShift);
 admin.get("/shift", getShift);
+admin.get("/shift/currents", getCurrentShift);
 admin.get("/shift/:id", getShiftById);
 admin.delete("/shift/:id", deleteShift);
 admin.put("/shift/:id", modificShift);
