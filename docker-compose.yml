@@ -40,7 +40,7 @@ services:
       PORT: 3000
       JWT_SECRET: Ambulancia
     volumes:
-      # Monta solo el código fuente, no node_modules
+      # Monta solo el código fuente, no node_modules xs
       - ./src:/app/src
       - ./prisma:/app/prisma
       - ./package.json:/app/package.json
