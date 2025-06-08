@@ -26,7 +26,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.post("/login", handleLogin);
 app.use("/api", router);
 
-app.get("/inicio", (req, res) => {
+app.get("/inicio", keycloak.protect(), (req, res) => {
   res.send("Bienvenido a mi api de prueba");
 });
 module.exports = app;

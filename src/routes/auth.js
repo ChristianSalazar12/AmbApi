@@ -9,7 +9,7 @@ const {
 const router = Router();
 
 router.post("/register", registerController);
-router.post("/login", loginController);
+// router.post("/login", loginController);
 router.get("/users", getUsers);
 
 router.get("/protectedRoute", (req, res) => {
