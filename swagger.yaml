@@ -925,16 +925,6 @@ paths:
         "500":
           description: Error del servidor
 
-      responses:
-        "200":
-          description: Turnos encontrados
-        "403":
-          description: Acceso denegado
-        "404":
-          description: Turno no encontrado
-        "500":
-          description: Error del servidor
-
     delete:
       tags:
         - Shifts

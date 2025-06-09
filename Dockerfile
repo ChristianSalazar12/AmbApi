@@ -1,25 +1,28 @@
-# Etapa 1: Builder (para aprovechar el cache)
-FROM node:22-alpine 
+FROM node:22-alpine AS builder
 
-# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia solo los archivos necesarios para instalar dependencias primero (mejor cache)
 COPY package*.json ./
-
-# Instala dependencias
 RUN npm install
 
-# Copia el resto del proyecto
 COPY . .
 
-# Genera el Prisma Client (usando el schema y las variables del .env si las necesita)
+# Genera el cliente de Prisma una vez
 RUN npx prisma generate
 
-# CMD npx prisma migrate deploy && npm run prisma:seed && npm run start
+# Imagen final
+FROM node:22-alpine
+WORKDIR /app
 
-# Expone el puerto que usa Express (ajústalo si usas otro)
+# Copiar solo lo necesario
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/keycloak.json ./keycloak.json
+
+# No intentes copiar .prisma ni dist/
+# Es para modo desarrollo con ts-node
+
 EXPOSE 3000
-
-# Comando para iniciar la app
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
