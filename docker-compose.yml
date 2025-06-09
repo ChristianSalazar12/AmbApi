@@ -5,11 +5,12 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: ambuapi
+      POSTGRES_DB: postgres # base de arranque
     ports:
       - "5433:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # crea bases al iniciar
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
@@ -18,7 +19,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://db:5432/ambuapi
+      KC_DB_URL: jdbc:postgresql://db:5432/keycloakdb
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: admin
       KC_HOSTNAME_STRICT: "false"
@@ -36,20 +37,18 @@ services:
     ports:
       - "3005:3000"
     environment:
-      DATABASE_URL: postgres://postgres:admin@db:5432/ambuapi
+      DATABASE_URL: postgres://postgres:admin@db:5432/apidb
       PORT: 3000
       JWT_SECRET: Ambulancia
     volumes:
-      # Monta solo el código fuente, no node_modules xs
       - ./src:/app/src
       - ./prisma:/app/prisma
       - ./package.json:/app/package.json
       - ./package-lock.json:/app/package-lock.json
       - ./keycloak.json:/app/keycloak.json
-      # Usa un volumen nombrado para node_modules
       - node_modules:/app/node_modules
-    # En la sección api, cambia:
-    command: sh -c "npm install && npx prisma generate && npx prisma migrate deploy && npx prisma db seed && npm run dev"
+      - ./swagger.yaml:/app/swagger.yaml
+    command: sh -c "npx prisma migrate deploy && npm run dev"
 
 volumes:
   db_data:
