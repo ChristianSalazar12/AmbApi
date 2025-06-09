@@ -24,8 +24,14 @@ services:
       KC_DB_PASSWORD: admin
       KC_HOSTNAME_STRICT: "false"
       KC_HTTP_ENABLED: "true"
+      # Descomenta la siguiente línea si necesitas importar el realm al iniciar
+      # KEYCLOAK_IMPORT: /opt/keycloak/data/import/realm-export.json
+
     ports:
       - "8080:8080"
+    #volumes:
+    # Descomenta este volumen si usas la importación
+    #   - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
     depends_on:
       - db
 
