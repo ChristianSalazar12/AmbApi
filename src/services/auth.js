@@ -3,7 +3,7 @@ const axios = require("axios");
 const KEYCLOAK_URL = "http://keycloak:8080";
 const REALM = "ambu-realm";
 const CLIENT_ID = "ambu-backend";
-const CLIENT_SECRET = "EtQKpjUq4r7hQwj31CREdPUIox9eLGSr";
+const CLIENT_SECRET = "lyYGHNI9p3gisof56n1nYmW3gWTex6uq";
 
 async function logear(username, password) {
   console.log(username, password);

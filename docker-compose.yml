@@ -14,7 +14,7 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
-    command: start-dev
+    command: start-dev --import-realm
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -24,14 +24,10 @@ services:
       KC_DB_PASSWORD: admin
       KC_HOSTNAME_STRICT: "false"
       KC_HTTP_ENABLED: "true"
-      # Descomenta la siguiente línea si necesitas importar el realm al iniciar
-      # KEYCLOAK_IMPORT: /opt/keycloak/data/import/ambu-realm-realm.json
-
     ports:
       - "8080:8080"
-    #volumes:
-    # Descomenta este volumen si usas la importación
-    #   - ./ambu-realm-realm.json:/opt/keycloak/data/import/ambu-realm-realm.json
+    volumes:
+      - ./ambu-realm-realm.json:/opt/keycloak/data/import/ambu-realm-realm.json
     depends_on:
       - db
 
