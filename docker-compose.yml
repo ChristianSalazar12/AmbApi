@@ -25,13 +25,13 @@ services:
       KC_HOSTNAME_STRICT: "false"
       KC_HTTP_ENABLED: "true"
       # Descomenta la siguiente línea si necesitas importar el realm al iniciar
-      # KEYCLOAK_IMPORT: /opt/keycloak/data/import/realm-export.json
+      # KEYCLOAK_IMPORT: /opt/keycloak/data/import/ambu-realm-realm.json
 
     ports:
       - "8080:8080"
     #volumes:
     # Descomenta este volumen si usas la importación
-    #   - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
+    #   - ./ambu-realm-realm.json:/opt/keycloak/data/import/ambu-realm-realm.json
     depends_on:
       - db
 
