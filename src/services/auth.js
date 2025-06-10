@@ -4,9 +4,6 @@ const KEYCLOAK_URL = "http://keycloak:8080";
 const REALM = "ambu-realm";
 const CLIENT_ID = "ambu-backend";
 const CLIENT_SECRET = "lyYGHNI9p3gisof56n1nYmW3gWTex6uq";
-//para logear con cuenta google_
-//ID de cliente = 270289841186-sjl4r3jqt5ttfb8gls8ocgtmtqvp88pp.apps.googleusercontent.com
-//client secret = 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
 
 async function logear(username, password) {
   console.log(username, password);

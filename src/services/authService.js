@@ -2,8 +2,8 @@ const axios = require("axios");
 
 const KEYCLOAK_URL = "http://localhost:8080";
 const REALM = "ambu-realm";
-const CLIENT_ID = "ambu-backend"; // debe ser "confidential" y tener secret
-const CLIENT_SECRET = "Wfz281VT2ivrBPym7iPt2dDA5DUJNp2d"; // pon aquí tu client secret real
+const CLIENT_ID = "ambu-backend";
+const CLIENT_SECRET = "Wfz281VT2ivrBPym7iPt2dDA5DUJNp2d";
 
 async function logins(document, password) {
   try {
